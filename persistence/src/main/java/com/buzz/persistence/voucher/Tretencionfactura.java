@@ -1,85 +1,148 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the TRETENCIONFACTURA database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Tretencionfactura.findAll", query="SELECT t FROM Tretencionfactura t")
-public class Tretencionfactura implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name= "TRETENCIONFACTURA")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tretencionfactura.findAll", query = "SELECT t FROM Tretencionfactura t"),
+    @NamedQuery(name = "Tretencionfactura.findByCrfactura", query = "SELECT t FROM Tretencionfactura t WHERE t.crfactura = :crfactura"),
+    @NamedQuery(name = "Tretencionfactura.findByCodigo", query = "SELECT t FROM Tretencionfactura t WHERE t.codigo = :codigo"),
+    @NamedQuery(name = "Tretencionfactura.findByCodigoPorcentaje", query = "SELECT t FROM Tretencionfactura t WHERE t.codigoPorcentaje = :codigoPorcentaje"),
+    @NamedQuery(name = "Tretencionfactura.findByTarifa", query = "SELECT t FROM Tretencionfactura t WHERE t.tarifa = :tarifa"),
+    @NamedQuery(name = "Tretencionfactura.findByValor", query = "SELECT t FROM Tretencionfactura t WHERE t.valor = :valor")})
+public class Tretencionfactura implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private Integer crfactura;
+    @Basic(optional = false)
+    @Column(nullable = false, length = 1)
+    private String codigo;
+    @Basic(optional = false)
+    @Column(name = "codigo_porcentaje", nullable = false, length = 3)
+    private String codigoPorcentaje;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private float tarifa;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private float valor;
+    @JoinColumn(name = "ccfactura_fk", referencedColumnName = "ccfactura", nullable = false)
+    @ManyToOne(optional = false)
+    private Tcabecerafactura ccfacturaFk;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int crfactura;
+    public Tretencionfactura() {
+    }
 
-	private String codigo;
+    public Tretencionfactura(Integer crfactura) {
+        this.crfactura = crfactura;
+    }
 
-	@Column(name="codigo_porcentaje")
-	private String codigoPorcentaje;
+    public Tretencionfactura(Integer crfactura, String codigo, String codigoPorcentaje, float tarifa, float valor) {
+        this.crfactura = crfactura;
+        this.codigo = codigo;
+        this.codigoPorcentaje = codigoPorcentaje;
+        this.tarifa = tarifa;
+        this.valor = valor;
+    }
 
-	private float tarifa;
+    public Integer getCrfactura() {
+        return crfactura;
+    }
 
-	private float valor;
+    public void setCrfactura(Integer crfactura) {
+        this.crfactura = crfactura;
+    }
 
-	//bi-directional many-to-one association to Tcabecerafactura
-	@ManyToOne
-	@JoinColumn(name="ccfactura_fk")
-	private Tcabecerafactura tcabecerafactura;
+    public String getCodigo() {
+        return codigo;
+    }
 
-	public Tretencionfactura() {
-	}
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
-	public int getCrfactura() {
-		return this.crfactura;
-	}
+    public String getCodigoPorcentaje() {
+        return codigoPorcentaje;
+    }
 
-	public void setCrfactura(int crfactura) {
-		this.crfactura = crfactura;
-	}
+    public void setCodigoPorcentaje(String codigoPorcentaje) {
+        this.codigoPorcentaje = codigoPorcentaje;
+    }
 
-	public String getCodigo() {
-		return this.codigo;
-	}
+    public float getTarifa() {
+        return tarifa;
+    }
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
+    public void setTarifa(float tarifa) {
+        this.tarifa = tarifa;
+    }
 
-	public String getCodigoPorcentaje() {
-		return this.codigoPorcentaje;
-	}
+    public float getValor() {
+        return valor;
+    }
 
-	public void setCodigoPorcentaje(String codigoPorcentaje) {
-		this.codigoPorcentaje = codigoPorcentaje;
-	}
+    public void setValor(float valor) {
+        this.valor = valor;
+    }
 
-	public float getTarifa() {
-		return this.tarifa;
-	}
+    public Tcabecerafactura getCcfacturaFk() {
+        return ccfacturaFk;
+    }
 
-	public void setTarifa(float tarifa) {
-		this.tarifa = tarifa;
-	}
+    public void setCcfacturaFk(Tcabecerafactura ccfacturaFk) {
+        this.ccfacturaFk = ccfacturaFk;
+    }
 
-	public float getValor() {
-		return this.valor;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (crfactura != null ? crfactura.hashCode() : 0);
+        return hash;
+    }
 
-	public void setValor(float valor) {
-		this.valor = valor;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tretencionfactura)) {
+            return false;
+        }
+        Tretencionfactura other = (Tretencionfactura) object;
+        if ((this.crfactura == null && other.crfactura != null) || (this.crfactura != null && !this.crfactura.equals(other.crfactura))) {
+            return false;
+        }
+        return true;
+    }
 
-	public Tcabecerafactura getTcabecerafactura() {
-		return this.tcabecerafactura;
-	}
-
-	public void setTcabecerafactura(Tcabecerafactura tcabecerafactura) {
-		this.tcabecerafactura = tcabecerafactura;
-	}
-
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Tretencionfactura[ crfactura=" + crfactura + " ]";
+    }
+    
 }

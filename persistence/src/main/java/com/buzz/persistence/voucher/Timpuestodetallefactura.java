@@ -1,96 +1,160 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the TIMPUESTODETALLEFACTURA database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Timpuestodetallefactura.findAll", query="SELECT t FROM Timpuestodetallefactura t")
-public class Timpuestodetallefactura implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name= "TIMPUESTODETALLEFACTURA")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Timpuestodetallefactura.findAll", query = "SELECT t FROM Timpuestodetallefactura t"),
+    @NamedQuery(name = "Timpuestodetallefactura.findByCidfactura", query = "SELECT t FROM Timpuestodetallefactura t WHERE t.cidfactura = :cidfactura"),
+    @NamedQuery(name = "Timpuestodetallefactura.findByCodigo", query = "SELECT t FROM Timpuestodetallefactura t WHERE t.codigo = :codigo"),
+    @NamedQuery(name = "Timpuestodetallefactura.findByCodigoPorcentaje", query = "SELECT t FROM Timpuestodetallefactura t WHERE t.codigoPorcentaje = :codigoPorcentaje"),
+    @NamedQuery(name = "Timpuestodetallefactura.findByTarifa", query = "SELECT t FROM Timpuestodetallefactura t WHERE t.tarifa = :tarifa"),
+    @NamedQuery(name = "Timpuestodetallefactura.findByBaseImponible", query = "SELECT t FROM Timpuestodetallefactura t WHERE t.baseImponible = :baseImponible"),
+    @NamedQuery(name = "Timpuestodetallefactura.findByValor", query = "SELECT t FROM Timpuestodetallefactura t WHERE t.valor = :valor")})
+public class Timpuestodetallefactura implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private Integer cidfactura;
+    @Basic(optional = false)
+    @Column(nullable = false, length = 1)
+    private String codigo;
+    @Basic(optional = false)
+    @Column(name = "codigo_porcentaje", nullable = false, length = 4)
+    private String codigoPorcentaje;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(precision = 4, scale = 2)
+    private Float tarifa;
+    @Basic(optional = false)
+    @Column(name = "base_imponible", nullable = false)
+    private float baseImponible;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private float valor;
+    @JoinColumn(name = "cdfactura_fk", referencedColumnName = "cdfactura", nullable = false)
+    @ManyToOne(optional = false)
+    private Tdetallefactura cdfacturaFk;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int cidfactura;
+    public Timpuestodetallefactura() {
+    }
 
-	@Column(name="base_imponible")
-	private float baseImponible;
+    public Timpuestodetallefactura(Integer cidfactura) {
+        this.cidfactura = cidfactura;
+    }
 
-	private String codigo;
+    public Timpuestodetallefactura(Integer cidfactura, String codigo, String codigoPorcentaje, float baseImponible, float valor) {
+        this.cidfactura = cidfactura;
+        this.codigo = codigo;
+        this.codigoPorcentaje = codigoPorcentaje;
+        this.baseImponible = baseImponible;
+        this.valor = valor;
+    }
 
-	@Column(name="codigo_porcentaje")
-	private String codigoPorcentaje;
+    public Integer getCidfactura() {
+        return cidfactura;
+    }
 
-	private float tarifa;
+    public void setCidfactura(Integer cidfactura) {
+        this.cidfactura = cidfactura;
+    }
 
-	private float valor;
+    public String getCodigo() {
+        return codigo;
+    }
 
-	//bi-directional many-to-one association to Tdetallefactura
-	@ManyToOne
-	@JoinColumn(name="cdfactura_fk")
-	private Tdetallefactura tdetallefactura;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
-	public Timpuestodetallefactura() {
-	}
+    public String getCodigoPorcentaje() {
+        return codigoPorcentaje;
+    }
 
-	public int getCidfactura() {
-		return this.cidfactura;
-	}
+    public void setCodigoPorcentaje(String codigoPorcentaje) {
+        this.codigoPorcentaje = codigoPorcentaje;
+    }
 
-	public void setCidfactura(int cidfactura) {
-		this.cidfactura = cidfactura;
-	}
+    public Float getTarifa() {
+        return tarifa;
+    }
 
-	public float getBaseImponible() {
-		return this.baseImponible;
-	}
+    public void setTarifa(Float tarifa) {
+        this.tarifa = tarifa;
+    }
 
-	public void setBaseImponible(float baseImponible) {
-		this.baseImponible = baseImponible;
-	}
+    public float getBaseImponible() {
+        return baseImponible;
+    }
 
-	public String getCodigo() {
-		return this.codigo;
-	}
+    public void setBaseImponible(float baseImponible) {
+        this.baseImponible = baseImponible;
+    }
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
+    public float getValor() {
+        return valor;
+    }
 
-	public String getCodigoPorcentaje() {
-		return this.codigoPorcentaje;
-	}
+    public void setValor(float valor) {
+        this.valor = valor;
+    }
 
-	public void setCodigoPorcentaje(String codigoPorcentaje) {
-		this.codigoPorcentaje = codigoPorcentaje;
-	}
+    public Tdetallefactura getCdfacturaFk() {
+        return cdfacturaFk;
+    }
 
-	public float getTarifa() {
-		return this.tarifa;
-	}
+    public void setCdfacturaFk(Tdetallefactura cdfacturaFk) {
+        this.cdfacturaFk = cdfacturaFk;
+    }
 
-	public void setTarifa(float tarifa) {
-		this.tarifa = tarifa;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (cidfactura != null ? cidfactura.hashCode() : 0);
+        return hash;
+    }
 
-	public float getValor() {
-		return this.valor;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Timpuestodetallefactura)) {
+            return false;
+        }
+        Timpuestodetallefactura other = (Timpuestodetallefactura) object;
+        if ((this.cidfactura == null && other.cidfactura != null) || (this.cidfactura != null && !this.cidfactura.equals(other.cidfactura))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setValor(float valor) {
-		this.valor = valor;
-	}
-
-	public Tdetallefactura getTdetallefactura() {
-		return this.tdetallefactura;
-	}
-
-	public void setTdetallefactura(Tdetallefactura tdetallefactura) {
-		this.tdetallefactura = tdetallefactura;
-	}
-
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Timpuestodetallefactura[ cidfactura=" + cidfactura + " ]";
+    }
+    
 }

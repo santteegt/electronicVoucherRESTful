@@ -1,65 +1,84 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-
-import javax.persistence.*;
+import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
- * The primary key class for the TUSUARIO database table.
- * 
+ *
+ * @author buzz
  */
 @Embeddable
 public class TusuarioPK implements Serializable {
-	//default serial version id, required for serializable classes.
-	private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @Column(name = "cusuario_fk", nullable = false, length = 10)
+    private String cusuarioFk;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fhasta;
 
-	@Column(name="cusuario_fk", insertable=false, updatable=false)
-	private String cusuarioFk;
+    public TusuarioPK() {
+    }
 
-	//@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp fhasta;
+    public TusuarioPK(String cusuarioFk, Date fhasta) {
+        this.cusuarioFk = cusuarioFk;
+        this.fhasta = fhasta;
+    }
 
-	public TusuarioPK() {
-	}
-	
-	public TusuarioPK(String cusuarioFk, Timestamp fhasta) {
-		this.cusuarioFk = cusuarioFk;
-		this.fhasta = fhasta;
-	}
+    public String getCusuarioFk() {
+        return cusuarioFk;
+    }
 
-	public String getCusuarioFk() {
-		return this.cusuarioFk;
-	}
-	public void setCusuarioFk(String cusuarioFk) {
-		this.cusuarioFk = cusuarioFk;
-	}
-	public java.util.Date getFhasta() {
-		return this.fhasta;
-	}
-	public void setFhasta(Timestamp fhasta) {
-		this.fhasta = fhasta;
-	}
+    public void setCusuarioFk(String cusuarioFk) {
+        this.cusuarioFk = cusuarioFk;
+    }
 
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof TusuarioPK)) {
-			return false;
-		}
-		TusuarioPK castOther = (TusuarioPK)other;
-		return 
-			this.cusuarioFk.equals(castOther.cusuarioFk)
-			&& this.fhasta.equals(castOther.fhasta);
-	}
+    public Date getFhasta() {
+        return fhasta;
+    }
 
-	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + this.cusuarioFk.hashCode();
-		hash = hash * prime + this.fhasta.hashCode();
-		
-		return hash;
-	}
+    public void setFhasta(Date fhasta) {
+        this.fhasta = fhasta;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (cusuarioFk != null ? cusuarioFk.hashCode() : 0);
+        hash += (fhasta != null ? fhasta.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TusuarioPK)) {
+            return false;
+        }
+        TusuarioPK other = (TusuarioPK) object;
+        if ((this.cusuarioFk == null && other.cusuarioFk != null) || (this.cusuarioFk != null && !this.cusuarioFk.equals(other.cusuarioFk))) {
+            return false;
+        }
+        if ((this.fhasta == null && other.fhasta != null) || (this.fhasta != null && !this.fhasta.equals(other.fhasta))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.TusuarioPK[ cusuarioFk=" + cusuarioFk + ", fhasta=" + fhasta + " ]";
+    }
+    
 }

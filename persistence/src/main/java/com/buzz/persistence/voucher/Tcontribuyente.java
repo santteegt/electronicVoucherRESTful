@@ -1,128 +1,189 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the TCONTRIBUYENTE database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Tcontribuyente.findAll", query="SELECT t FROM Tcontribuyente t")
-public class Tcontribuyente implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name="TCONTRIBUYENTE", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"identificacion"})})
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tcontribuyente.findAll", query = "SELECT t FROM Tcontribuyente t"),
+    @NamedQuery(name = "Tcontribuyente.findByCcontribuyente", query = "SELECT t FROM Tcontribuyente t WHERE t.tcontribuyentePK.ccontribuyente = :ccontribuyente"),
+    @NamedQuery(name = "Tcontribuyente.findByFhasta", query = "SELECT t FROM Tcontribuyente t WHERE t.tcontribuyentePK.fhasta = :fhasta"),
+    @NamedQuery(name = "Tcontribuyente.findByFdesde", query = "SELECT t FROM Tcontribuyente t WHERE t.fdesde = :fdesde"),
+    @NamedQuery(name = "Tcontribuyente.findByIdentificacion", query = "SELECT t FROM Tcontribuyente t WHERE t.identificacion = :identificacion"),
+    @NamedQuery(name = "Tcontribuyente.findByRazonSocial", query = "SELECT t FROM Tcontribuyente t WHERE t.razonSocial = :razonSocial"),
+    @NamedQuery(name = "Tcontribuyente.findByNombreComercial", query = "SELECT t FROM Tcontribuyente t WHERE t.nombreComercial = :nombreComercial")})
+public class Tcontribuyente implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected TcontribuyentePK tcontribuyentePK;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fdesde;
+    @Basic(optional = false)
+    @Column(nullable = false, length = 13)
+    private String identificacion;
+    @Basic(optional = false)
+    @Column(name = "razon_social", nullable = false, length = 300)
+    private String razonSocial;
+    @Column(name = "nombre_comercial", length = 300)
+    private String nombreComercial;
+    @Lob
+    private byte[] logo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccontribuyenteFk")
+    private List<Tusuarioid> tusuarioidList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcontribuyente")
+    private List<Tcomprobante> tcomprobanteList;
+    @JoinColumn(name = "ctipocontribuyente_fk", referencedColumnName = "ctipocontribuyente", nullable = false)
+    @ManyToOne(optional = false)
+    private Ttipocontribuyente ctipocontribuyenteFk;
 
-	@EmbeddedId
-	private TcontribuyentePK id;
+    public Tcontribuyente() {
+    }
 
-	//@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp fdesde;
+    public Tcontribuyente(TcontribuyentePK tcontribuyentePK) {
+        this.tcontribuyentePK = tcontribuyentePK;
+    }
 
-	private String identificacion;
+    public Tcontribuyente(TcontribuyentePK tcontribuyentePK, Date fdesde, String identificacion, String razonSocial) {
+        this.tcontribuyentePK = tcontribuyentePK;
+        this.fdesde = fdesde;
+        this.identificacion = identificacion;
+        this.razonSocial = razonSocial;
+    }
 
-	@Lob
-	private byte[] logo;
+    public Tcontribuyente(int ccontribuyente, Date fhasta) {
+        this.tcontribuyentePK = new TcontribuyentePK(ccontribuyente, fhasta);
+    }
 
-	@Column(name="nombre_comercial")
-	private String nombreComercial;
+    public TcontribuyentePK getTcontribuyentePK() {
+        return tcontribuyentePK;
+    }
 
-	@Column(name="razon_social")
-	private String razonSocial;
+    public void setTcontribuyentePK(TcontribuyentePK tcontribuyentePK) {
+        this.tcontribuyentePK = tcontribuyentePK;
+    }
 
-	//uni-directional many-to-one association to Ttipocontribuyente
-	@ManyToOne
-	@JoinColumn(name="ctipocontribuyente_fk")
-	private Ttipocontribuyente ttipocontribuyente;
+    public Date getFdesde() {
+        return fdesde;
+    }
 
-	//bi-directional many-to-one association to Tusuarioid
-	@OneToMany(mappedBy="tcontribuyente")
-	private List<Tusuarioid> tusuarioids;
+    public void setFdesde(Date fdesde) {
+        this.fdesde = fdesde;
+    }
 
-	public Tcontribuyente() {
-	}
+    public String getIdentificacion() {
+        return identificacion;
+    }
 
-	public TcontribuyentePK getId() {
-		return this.id;
-	}
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
 
-	public void setId(TcontribuyentePK id) {
-		this.id = id;
-	}
+    public String getRazonSocial() {
+        return razonSocial;
+    }
 
-	public Date getFdesde() {
-		return this.fdesde;
-	}
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
 
-	public void setFdesde(Timestamp fdesde) {
-		this.fdesde = fdesde;
-	}
+    public String getNombreComercial() {
+        return nombreComercial;
+    }
 
-	public String getIdentificacion() {
-		return this.identificacion;
-	}
+    public void setNombreComercial(String nombreComercial) {
+        this.nombreComercial = nombreComercial;
+    }
 
-	public void setIdentificacion(String identificacion) {
-		this.identificacion = identificacion;
-	}
+    public byte[] getLogo() {
+        return logo;
+    }
 
-	public byte[] getLogo() {
-		return this.logo;
-	}
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
+    }
 
-	public void setLogo(byte[] logo) {
-		this.logo = logo;
-	}
+    @XmlTransient
+    public List<Tusuarioid> getTusuarioidList() {
+        return tusuarioidList;
+    }
 
-	public String getNombreComercial() {
-		return this.nombreComercial;
-	}
+    public void setTusuarioidList(List<Tusuarioid> tusuarioidList) {
+        this.tusuarioidList = tusuarioidList;
+    }
 
-	public void setNombreComercial(String nombreComercial) {
-		this.nombreComercial = nombreComercial;
-	}
+    @XmlTransient
+    public List<Tcomprobante> getTcomprobanteList() {
+        return tcomprobanteList;
+    }
 
-	public String getRazonSocial() {
-		return this.razonSocial;
-	}
+    public void setTcomprobanteList(List<Tcomprobante> tcomprobanteList) {
+        this.tcomprobanteList = tcomprobanteList;
+    }
 
-	public void setRazonSocial(String razonSocial) {
-		this.razonSocial = razonSocial;
-	}
+    public Ttipocontribuyente getCtipocontribuyenteFk() {
+        return ctipocontribuyenteFk;
+    }
 
-	public Ttipocontribuyente getTtipocontribuyente() {
-		return this.ttipocontribuyente;
-	}
+    public void setCtipocontribuyenteFk(Ttipocontribuyente ctipocontribuyenteFk) {
+        this.ctipocontribuyenteFk = ctipocontribuyenteFk;
+    }
 
-	public void setTtipocontribuyente(Ttipocontribuyente ttipocontribuyente) {
-		this.ttipocontribuyente = ttipocontribuyente;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (tcontribuyentePK != null ? tcontribuyentePK.hashCode() : 0);
+        return hash;
+    }
 
-	public List<Tusuarioid> getTusuarioids() {
-		return this.tusuarioids;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tcontribuyente)) {
+            return false;
+        }
+        Tcontribuyente other = (Tcontribuyente) object;
+        if ((this.tcontribuyentePK == null && other.tcontribuyentePK != null) || (this.tcontribuyentePK != null && !this.tcontribuyentePK.equals(other.tcontribuyentePK))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setTusuarioids(List<Tusuarioid> tusuarioids) {
-		this.tusuarioids = tusuarioids;
-	}
-
-	public Tusuarioid addTusuarioid(Tusuarioid tusuarioid) {
-		getTusuarioids().add(tusuarioid);
-		tusuarioid.setTcontribuyente(this);
-
-		return tusuarioid;
-	}
-
-	public Tusuarioid removeTusuarioid(Tusuarioid tusuarioid) {
-		getTusuarioids().remove(tusuarioid);
-		tusuarioid.setTcontribuyente(null);
-
-		return tusuarioid;
-	}
-
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Tcontribuyente[ tcontribuyentePK=" + tcontribuyentePK + " ]";
+    }
+    
 }

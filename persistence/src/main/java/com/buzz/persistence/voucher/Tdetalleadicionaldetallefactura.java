@@ -1,64 +1,122 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the TDETALLEADICIONALDETALLEFACTURA database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Tdetalleadicionaldetallefactura.findAll", query="SELECT t FROM Tdetalleadicionaldetallefactura t")
-public class Tdetalleadicionaldetallefactura implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name= "TDETALLEADICIONALDETALLEFACTURA")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tdetalleadicionaldetallefactura.findAll", query = "SELECT t FROM Tdetalleadicionaldetallefactura t"),
+    @NamedQuery(name = "Tdetalleadicionaldetallefactura.findByCdafactura", query = "SELECT t FROM Tdetalleadicionaldetallefactura t WHERE t.cdafactura = :cdafactura"),
+    @NamedQuery(name = "Tdetalleadicionaldetallefactura.findByNombre", query = "SELECT t FROM Tdetalleadicionaldetallefactura t WHERE t.nombre = :nombre"),
+    @NamedQuery(name = "Tdetalleadicionaldetallefactura.findByValor", query = "SELECT t FROM Tdetalleadicionaldetallefactura t WHERE t.valor = :valor")})
+public class Tdetalleadicionaldetallefactura implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private Integer cdafactura;
+    @Basic(optional = false)
+    @Column(nullable = false, length = 300)
+    private String nombre;
+    @Basic(optional = false)
+    @Column(nullable = false, length = 300)
+    private String valor;
+    @JoinColumn(name = "cdfactura_fk", referencedColumnName = "cdfactura", nullable = false)
+    @ManyToOne(optional = false)
+    private Tdetallefactura cdfacturaFk;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int cdafactura;
+    public Tdetalleadicionaldetallefactura() {
+    }
 
-	private String nombre;
+    public Tdetalleadicionaldetallefactura(Integer cdafactura) {
+        this.cdafactura = cdafactura;
+    }
 
-	private String valor;
+    public Tdetalleadicionaldetallefactura(Integer cdafactura, String nombre, String valor) {
+        this.cdafactura = cdafactura;
+        this.nombre = nombre;
+        this.valor = valor;
+    }
 
-	//bi-directional many-to-one association to Tdetallefactura
-	@ManyToOne
-	@JoinColumn(name="cdfactura_fk")
-	private Tdetallefactura tdetallefactura;
+    public Integer getCdafactura() {
+        return cdafactura;
+    }
 
-	public Tdetalleadicionaldetallefactura() {
-	}
+    public void setCdafactura(Integer cdafactura) {
+        this.cdafactura = cdafactura;
+    }
 
-	public int getCdafactura() {
-		return this.cdafactura;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public void setCdafactura(int cdafactura) {
-		this.cdafactura = cdafactura;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public String getNombre() {
-		return this.nombre;
-	}
+    public String getValor() {
+        return valor;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
 
-	public String getValor() {
-		return this.valor;
-	}
+    public Tdetallefactura getCdfacturaFk() {
+        return cdfacturaFk;
+    }
 
-	public void setValor(String valor) {
-		this.valor = valor;
-	}
+    public void setCdfacturaFk(Tdetallefactura cdfacturaFk) {
+        this.cdfacturaFk = cdfacturaFk;
+    }
 
-	public Tdetallefactura getTdetallefactura() {
-		return this.tdetallefactura;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (cdafactura != null ? cdafactura.hashCode() : 0);
+        return hash;
+    }
 
-	public void setTdetallefactura(Tdetallefactura tdetallefactura) {
-		this.tdetallefactura = tdetallefactura;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tdetalleadicionaldetallefactura)) {
+            return false;
+        }
+        Tdetalleadicionaldetallefactura other = (Tdetalleadicionaldetallefactura) object;
+        if ((this.cdafactura == null && other.cdafactura != null) || (this.cdafactura != null && !this.cdafactura.equals(other.cdafactura))) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Tdetalleadicionaldetallefactura[ cdafactura=" + cdafactura + " ]";
+    }
+    
 }

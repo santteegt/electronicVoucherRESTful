@@ -1,99 +1,162 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
-import java.sql.Timestamp;
 import java.util.Date;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the TUSUARIO database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Tusuario.findAll", query="SELECT t FROM Tusuario t")
-public class Tusuario implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name="TUSUARIO")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tusuario.findAll", query = "SELECT t FROM Tusuario t"),
+    @NamedQuery(name = "Tusuario.findByCusuarioFk", query = "SELECT t FROM Tusuario t WHERE t.tusuarioPK.cusuarioFk = :cusuarioFk"),
+    @NamedQuery(name = "Tusuario.findByFhasta", query = "SELECT t FROM Tusuario t WHERE t.tusuarioPK.fhasta = :fhasta"),
+    @NamedQuery(name = "Tusuario.findByFdesde", query = "SELECT t FROM Tusuario t WHERE t.fdesde = :fdesde"),
+    @NamedQuery(name = "Tusuario.findByActivo", query = "SELECT t FROM Tusuario t WHERE t.activo = :activo"),
+    @NamedQuery(name = "Tusuario.findByRazonSocial", query = "SELECT t FROM Tusuario t WHERE t.razonSocial = :razonSocial"),
+    @NamedQuery(name = "Tusuario.findByIdentificacion", query = "SELECT t FROM Tusuario t WHERE t.identificacion = :identificacion")})
+public class Tusuario implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected TusuarioPK tusuarioPK;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fdesde;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private boolean activo;
+    @Basic(optional = false)
+    @Lob
+    @Column(nullable = false, length = 65535)
+    private String contrasena;
+    @Column(length = 100)
+    private String razonSocial;
+    @Column(length = 13)
+    private String identificacion;
+    @JoinColumn(name = "cusuario_fk", referencedColumnName = "cusuario", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Tusuarioid tusuarioid;
 
-	@EmbeddedId
-	private TusuarioPK id;
+    public Tusuario() {
+    }
 
-	private byte activo;
+    public Tusuario(TusuarioPK tusuarioPK) {
+        this.tusuarioPK = tusuarioPK;
+    }
 
-	@Lob
-	private String contrasena;
+    public Tusuario(TusuarioPK tusuarioPK, Date fdesde, boolean activo, String contrasena) {
+        this.tusuarioPK = tusuarioPK;
+        this.fdesde = fdesde;
+        this.activo = activo;
+        this.contrasena = contrasena;
+    }
 
-	//@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp fdesde;
+    public Tusuario(String cusuarioFk, Date fhasta) {
+        this.tusuarioPK = new TusuarioPK(cusuarioFk, fhasta);
+    }
 
-	private String identificacion;
+    public TusuarioPK getTusuarioPK() {
+        return tusuarioPK;
+    }
 
-	private String razonSocial;
+    public void setTusuarioPK(TusuarioPK tusuarioPK) {
+        this.tusuarioPK = tusuarioPK;
+    }
 
-	//uni-directional many-to-one association to Tusuarioid
-	@ManyToOne
-	@JoinColumn(name="cusuario_fk")
-	private Tusuarioid tusuarioid;
+    public Date getFdesde() {
+        return fdesde;
+    }
 
-	public Tusuario() {
-	}
+    public void setFdesde(Date fdesde) {
+        this.fdesde = fdesde;
+    }
 
-	public TusuarioPK getId() {
-		return this.id;
-	}
+    public boolean getActivo() {
+        return activo;
+    }
 
-	public void setId(TusuarioPK id) {
-		this.id = id;
-	}
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
-	public byte getActivo() {
-		return this.activo;
-	}
+    public String getContrasena() {
+        return contrasena;
+    }
 
-	public void setActivo(byte activo) {
-		this.activo = activo;
-	}
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
 
-	public String getContrasena() {
-		return this.contrasena;
-	}
+    public String getRazonSocial() {
+        return razonSocial;
+    }
 
-	public void setContrasena(String contrasena) {
-		this.contrasena = contrasena;
-	}
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
 
-	public Date getFdesde() {
-		return this.fdesde;
-	}
+    public String getIdentificacion() {
+        return identificacion;
+    }
 
-	public void setFdesde(Timestamp fdesde) {
-		this.fdesde = fdesde;
-	}
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
 
-	public String getIdentificacion() {
-		return this.identificacion;
-	}
+    public Tusuarioid getTusuarioid() {
+        return tusuarioid;
+    }
 
-	public void setIdentificacion(String identificacion) {
-		this.identificacion = identificacion;
-	}
+    public void setTusuarioid(Tusuarioid tusuarioid) {
+        this.tusuarioid = tusuarioid;
+    }
 
-	public String getRazonSocial() {
-		return this.razonSocial;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (tusuarioPK != null ? tusuarioPK.hashCode() : 0);
+        return hash;
+    }
 
-	public void setRazonSocial(String razonSocial) {
-		this.razonSocial = razonSocial;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tusuario)) {
+            return false;
+        }
+        Tusuario other = (Tusuario) object;
+        if ((this.tusuarioPK == null && other.tusuarioPK != null) || (this.tusuarioPK != null && !this.tusuarioPK.equals(other.tusuarioPK))) {
+            return false;
+        }
+        return true;
+    }
 
-	public Tusuarioid getTusuarioid() {
-		return this.tusuarioid;
-	}
-
-	public void setTusuarioid(Tusuarioid tusuarioid) {
-		this.tusuarioid = tusuarioid;
-	}
-
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Tusuario[ tusuarioPK=" + tusuarioPK + " ]";
+    }
+    
 }

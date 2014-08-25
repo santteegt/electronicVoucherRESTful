@@ -1,64 +1,80 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
- * The primary key class for the TSESIONCOMPROBANTE database table.
- * 
+ *
+ * @author buzz
  */
 @Embeddable
 public class TsesioncomprobantePK implements Serializable {
-	//default serial version id, required for serializable classes.
-	private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @Column(name = "ccontribuyente_fk", nullable = false)
+    private int ccontribuyenteFk;
+    @Basic(optional = false)
+    @Column(nullable = false, length = 30)
+    private String idpeticion;
 
-	@Column(insertable=false, updatable=false)
-	private String idpeticion;
+    public TsesioncomprobantePK() {
+    }
 
-	@Column(name="ccontribuyente_fk", insertable=false, updatable=false)
-	private int ccontribuyenteFk;
+    public TsesioncomprobantePK(int ccontribuyenteFk, String idpeticion) {
+        this.ccontribuyenteFk = ccontribuyenteFk;
+        this.idpeticion = idpeticion;
+    }
 
-	public TsesioncomprobantePK() {
-	}
-	
-	public TsesioncomprobantePK(String idpeticion, int ccontribuyenteFk) {
-		this.idpeticion = idpeticion;
-		this.ccontribuyenteFk = ccontribuyenteFk;
-	}
+    public int getCcontribuyenteFk() {
+        return ccontribuyenteFk;
+    }
 
-	public String getIdpeticion() {
-		return this.idpeticion;
-	}
-	public void setIdpeticion(String idpeticion) {
-		this.idpeticion = idpeticion;
-	}
-	public int getCcontribuyenteFk() {
-		return this.ccontribuyenteFk;
-	}
-	public void setCcontribuyenteFk(int ccontribuyenteFk) {
-		this.ccontribuyenteFk = ccontribuyenteFk;
-	}
+    public void setCcontribuyenteFk(int ccontribuyenteFk) {
+        this.ccontribuyenteFk = ccontribuyenteFk;
+    }
 
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof TsesioncomprobantePK)) {
-			return false;
-		}
-		TsesioncomprobantePK castOther = (TsesioncomprobantePK)other;
-		return 
-			this.idpeticion.equals(castOther.idpeticion)
-			&& (this.ccontribuyenteFk == castOther.ccontribuyenteFk);
-	}
+    public String getIdpeticion() {
+        return idpeticion;
+    }
 
-	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + this.idpeticion.hashCode();
-		hash = hash * prime + this.ccontribuyenteFk;
-		
-		return hash;
-	}
+    public void setIdpeticion(String idpeticion) {
+        this.idpeticion = idpeticion;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (int) ccontribuyenteFk;
+        hash += (idpeticion != null ? idpeticion.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TsesioncomprobantePK)) {
+            return false;
+        }
+        TsesioncomprobantePK other = (TsesioncomprobantePK) object;
+        if (this.ccontribuyenteFk != other.ccontribuyenteFk) {
+            return false;
+        }
+        if ((this.idpeticion == null && other.idpeticion != null) || (this.idpeticion != null && !this.idpeticion.equals(other.idpeticion))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.TsesioncomprobantePK[ ccontribuyenteFk=" + ccontribuyenteFk + ", idpeticion=" + idpeticion + " ]";
+    }
+    
 }
