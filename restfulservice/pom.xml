@@ -1,0 +1,154 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.buzz</groupId>
+  <artifactId>restfulservice</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>WEB - RESTful Service</name>
+  <url>http://maven.apache.org</url>
+    <build>
+    <!-- 
+        <plugins>
+            <plugin>
+                <groupId>com.github.wvengen</groupId> 
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.7</version>
+                <executions>
+                   <execution>
+                       <phase>package</phase>
+                       <goals><goal>proguard</goal></goals>
+                   </execution>
+                </executions>
+                <configuration>
+            		<options>
+            			<option>-verbose</option>
+            			<option>-keep public class com.buzz.electronicvoucher.ElectronicVoucherSender {*;}</option>
+            		</options>
+                	<proguardVersion>4.11</proguardVersion> 
+                    <obfuscate>true</obfuscate>
+                    <injar>${project.build.finalName}.war</injar>
+                    <outjar>${project.build.finalName}-small.war</outjar>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                        <lib>${java.home}/lib/jsse.jar</lib>
+                    </libs>
+                </configuration>
+            </plugin>
+        </plugins>
+        -->
+        <finalName>RESTfulService</finalName>
+    </build>
+  <!-- 
+   <repositories>
+       <repository>
+         <id>jboss</id>
+         <url>http://repository.jboss.org/maven2</url>
+       </repository>
+   </repositories>
+   -->
+ <dependencies>
+ 	<dependency>
+ 		<groupId>com.buzz</groupId>
+  		<artifactId>electronic-voucher</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+ 	</dependency>
+ 	<dependency>
+    <groupId>log4j</groupId>
+    <artifactId>log4j</artifactId>
+    <version>1.2.17</version>
+</dependency>
+ <!-- core library -->
+ <dependency>
+    <groupId>org.jboss.resteasy</groupId>
+     <artifactId>resteasy-jaxrs</artifactId>
+    <version>3.0.2.Final</version>
+ </dependency>
+<!-- JAXB support -->
+<dependency>
+  <groupId>org.jboss.resteasy</groupId>
+    <artifactId>resteasy-jaxb-provider</artifactId>
+  <version>3.0.2.Final</version>
+</dependency>
+<dependency>
+    <groupId>org.jboss.resteasy</groupId>
+    <artifactId>jaxrs-api</artifactId>
+    <version>3.0.2.Final</version>
+</dependency>
+<dependency>
+    <groupId>net.sf.scannotation</groupId>
+    <artifactId>scannotation</artifactId>
+    <version>1.0.3</version>
+</dependency>
+    <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jackson-provider</artifactId>
+        <version>3.0.2.Final</version>
+    </dependency>
+    <dependency>
+  <groupId>com.fasterxml.jackson.datatype</groupId>
+  <artifactId>jackson-datatype-json-org</artifactId>
+  <version>2.4.0</version>
+</dependency>
+    <!-- 
+    <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jettison-provider</artifactId>
+        <version>3.0.2.Final</version>
+    </dependency>
+    --> 
+</dependencies>
+<!-- 
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+         <artifactId>resteasy-jaxrs</artifactId>
+        <version>3.0.2.Final</version>
+        <scope>compile</scope>
+    </dependency>
+   
+   <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jaxb-provider</artifactId>
+      <version>3.0.2.Final</version>
+      <scope>compile</scope>
+   </dependency>
+   
+   <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-multipart-provider</artifactId>
+      <version>3.0.2.Final</version>
+      <scope>compile</scope>
+   </dependency>
+   <dependency>
+    <groupId>org.jboss.resteasy</groupId>
+    <artifactId>jaxrs-api</artifactId>
+    <version>3.0.2.Final</version>
+	</dependency>
+   <dependency>
+        <groupId>net.sf.scannotation</groupId>
+        <artifactId>scannotation</artifactId>
+        <version>1.0.3</version>
+        <scope>compile</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jackson-provider</artifactId>
+        <version>3.0.2.Final</version>
+    </dependency>
+  </dependencies>  -->
+  
+  <!-- 
+  <build>
+    <finalName>RESTfulService</finalName>
+  </build>
+  -->
+</project>

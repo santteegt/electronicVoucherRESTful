@@ -1,0 +1,177 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.buzz</groupId>
+  <artifactId>electronic-voucher</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>electronic-voucher</name>
+  <!-- 
+  <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.wvengen</groupId> 
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.7</version>
+                <executions>
+                   <execution>
+                       <phase>package</phase>
+                       <goals><goal>proguard</goal></goals>
+                   </execution>
+                </executions>
+                <configuration>
+            		<options>
+            			<option>-verbose</option>
+            			<option>-keep public class com.buzz.electronicvoucher.ElectronicVoucherSender {*;}</option>
+            		</options>
+                	<proguardVersion>4.11</proguardVersion> 
+                    <obfuscate>true</obfuscate>
+                    <injar>${project.build.finalName}.jar</injar>
+                    <outjar>${project.build.finalName}-small.jar</outjar>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                        <lib>${java.home}/lib/jsse.jar</lib>
+                    </libs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+  -->
+  <!-- <url>http://maven.apache.org</url> -->
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <!-- 
+  <repositories>
+	<repository>
+		<id>default</id>
+		<url>http://dev.fit-bank.com/nexus/content/groups/public</url>
+		<snapshots>
+			<enabled>false</enabled>
+		</snapshots>
+	</repository>
+	<repository>
+		<id>snapshots</id>
+		<url>http://dev.fit-bank.com/nexus/content/groups/public-snapshots</url>
+		<releases>
+			<enabled>false</enabled>
+		</releases>
+	</repository>
+</repositories>
+-->
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>log4j</groupId>
+   	 	<artifactId>log4j</artifactId>
+    	<version>1.2.17</version>
+	</dependency>
+    <dependency>
+		<groupId>xml-security</groupId>
+		<artifactId>xml-security</artifactId>
+		<version>1.0.4</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.axis</groupId>
+		<artifactId>axis</artifactId>
+		<version>1.4</version>
+	</dependency>
+	<dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.8</version>
+    </dependency>
+    <dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>MITyCLibAPI</artifactId>
+		<version>1.1.7</version>
+	</dependency>
+	<dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>MITyCLibTSA</artifactId>
+		<version>1.1.7</version>
+	</dependency>
+	<dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>MITyCLibOCSP</artifactId>
+		<version>1.1.7</version>
+	</dependency>
+	<dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>MITyCLibCert</artifactId>
+		<version>1.1.7</version>
+	</dependency>
+	<dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>MITyCLibTrust</artifactId>
+		<version>1.1.7</version>
+	</dependency>
+	<dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>MITyCLibCrypt</artifactId>
+		<version>1.1.7</version>
+	</dependency>
+	<dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>MITyCLibPolicy</artifactId>
+		<version>1.1.7</version>
+	</dependency>
+	<dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>MITyCLibXADES</artifactId>
+		<version>1.1.7</version>
+	</dependency>
+	<dependency>
+		<groupId>es.mityc.jumbo.adsi</groupId>
+		<artifactId>xmlsec-adsi</artifactId>
+		<version>1.4.2</version>
+	</dependency>
+	    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20090211</version>
+    </dependency>
+    <dependency>
+    	<groupId>commons-codec</groupId>
+    	<artifactId>commons-codec</artifactId>
+    	<version>1.4</version>
+    </dependency>
+    <dependency>
+    	<groupId>commons-lang</groupId>
+    	<artifactId>commons-lang</artifactId>
+    	<version>2.4</version>
+    </dependency>  
+    <dependency>
+    	<groupId>xalan</groupId>
+    	<artifactId>xalan</artifactId>
+    	<version>2.3.1</version>
+    </dependency>
+    <dependency>
+  	  <groupId>org.bouncycastle</groupId>
+  		<artifactId>bcmail-jdk14</artifactId>
+  		<version>1.38</version>
+    </dependency>
+    
+    <dependency>
+	<groupId>net.sf.proguard</groupId>
+	<artifactId>proguard-base</artifactId>
+	<version>4.11</version>
+</dependency>
+<dependency>
+	  <groupId>com.buzz</groupId>
+  <artifactId>tools</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+</dependency>
+
+    
+  </dependencies>
+</project>

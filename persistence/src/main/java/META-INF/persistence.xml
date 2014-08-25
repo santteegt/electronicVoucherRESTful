@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="persistence">
+		<class>com.buzz.persistence.voucher.Tcabecerafactura</class>
+		<class>com.buzz.persistence.voucher.Tcabecerafacturaimpuesto</class>
+		<class>com.buzz.persistence.voucher.Tcabeceraguiaremision</class>
+		<class>com.buzz.persistence.voucher.Tcabeceranotacreditodebito</class>
+		<class>com.buzz.persistence.voucher.Tcabeceranotacreditodebitoimpuesto</class>
+		<class>com.buzz.persistence.voucher.Tcabeceraretencion</class>
+		<class>com.buzz.persistence.voucher.Tcomprobante</class>
+		<class>com.buzz.persistence.voucher.TcomprobantePK</class>
+		<class>com.buzz.persistence.voucher.Tcontribuyente</class>
+		<class>com.buzz.persistence.voucher.TcontribuyentePK</class>
+		<class>com.buzz.persistence.voucher.Tdestinatarioguiaremision</class>
+		<class>com.buzz.persistence.voucher.Tdetalleadicionaldestinatarioguiaremision</class>
+		<class>com.buzz.persistence.voucher.Tdetalleadicionaldetallefactura</class>
+		<class>com.buzz.persistence.voucher.Tdetalleadicionaldetallenotacredito</class>
+		<class>com.buzz.persistence.voucher.Tdetalledestinatarioguiaremision</class>
+		<class>com.buzz.persistence.voucher.Tdetallefactura</class>
+		<class>com.buzz.persistence.voucher.Tdetallenotacredito</class>
+		<class>com.buzz.persistence.voucher.Tdetallenotadebito</class>
+		<class>com.buzz.persistence.voucher.Tdetalleretencion</class>
+		<class>com.buzz.persistence.voucher.Timpuestodetallefactura</class>
+		<class>com.buzz.persistence.voucher.Timpuestodetallenotacredito</class>
+		<class>com.buzz.persistence.voucher.Tinformacionadicionalcomprobante</class>
+		<class>com.buzz.persistence.voucher.Tretencionfactura</class>
+		<class>com.buzz.persistence.voucher.Tsesioncomprobante</class>
+		<class>com.buzz.persistence.voucher.TsesioncomprobantePK</class>
+		<class>com.buzz.persistence.voucher.Ttipocontribuyente</class>
+		<class>com.buzz.persistence.voucher.Tusuario</class>
+		<class>com.buzz.persistence.voucher.TusuarioPK</class>
+		<class>com.buzz.persistence.voucher.Tusuarioid</class>
+		<class>com.buzz.persistence.voucher.Tusuariosesion</class>
+		
+		 <properties>
+           <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+           <property name="hibernate.connection.url" 
+                       value="jdbc:mysql://192.168.1.7:3306/buzzSRI"/>
+           <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+           <property name="hibernate.connection.username" value="buzzsri"/>
+           <property name="hibernate.connection.password" value="buzzsri2014"/>
+           <property name="hibernate.show_sql" value="true"/>
+           <property name="hibernate.format_sql" value="true"/>
+	           
+       	</properties>
+	</persistence-unit>
+</persistence>
