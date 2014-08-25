@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import com.buzz.persistence.voucher.Tcontribuyente;
 import com.buzz.persistence.voucher.TcontribuyentePK;
+import com.buzz.persistence.voucher.Ttipocontribuyente;
 import com.buzz.persistence.voucher.Tusuarioid;
 
 public class JPASession {
@@ -70,15 +71,12 @@ public class JPASession {
 	}
 	
 	public static void main(String []args)throws Exception {
-		JPASession session = JPASession.getSession();
-		TcontribuyentePK pk = new TcontribuyentePK();
-		pk.setCcontribuyente(1);
-		pk.setFhasta(
-				new Timestamp(
-				new SimpleDateFormat("dd-MM-yyyy").parse("31-12-2999").getTime()
-				));
-		Tcontribuyente c = session.getEntity(Tcontribuyente.class, pk);
-		System.out.println(c);
+		JPAController<Ttipocontribuyente> session = new JPAController<Ttipocontribuyente>();
+                Ttipocontribuyente tc = new Ttipocontribuyente();            
+                tc.setDescripcion("cliente con RUC");                
+		
+                session.create(tc);
+                System.out.println(session.getCount(tc));
 		
 		
 	}
