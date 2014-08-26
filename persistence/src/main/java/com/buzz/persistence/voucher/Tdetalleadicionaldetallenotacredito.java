@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author buzz
  */
 @Entity
-@Table(name= "TDETALLEADICIONALDETALLENOTACREDITO")
+@Table(name = "TDETALLEADICIONALDETALLENOTACREDITO", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tdetalleadicionaldetallenotacredito.findAll", query = "SELECT t FROM Tdetalleadicionaldetallenotacredito t"),
@@ -37,13 +37,13 @@ public class Tdetalleadicionaldetallenotacredito implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "cdancredito", nullable = false)
     private Integer cdancredito;
     @Basic(optional = false)
-    @Column(nullable = false, length = 300)
+    @Column(name = "nombre", nullable = false, length = 300)
     private String nombre;
     @Basic(optional = false)
-    @Column(nullable = false, length = 300)
+    @Column(name = "valor", nullable = false, length = 300)
     private String valor;
     @JoinColumn(name = "cdncredito_fk", referencedColumnName = "cdncredito", nullable = false)
     @ManyToOne(optional = false)

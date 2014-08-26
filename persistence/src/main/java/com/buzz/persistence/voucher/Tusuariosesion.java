@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author buzz
  */
 @Entity
-@Table(name= "TUSUARIOSESION")
+@Table(name = "TUSUARIOSESION", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tusuariosesion.findAll", query = "SELECT t FROM Tusuariosesion t"),
@@ -37,7 +37,7 @@ public class Tusuariosesion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(nullable = false, length = 30)
+    @Column(name = "csesion", nullable = false, length = 30)
     private String csesion;
     @Basic(optional = false)
     @Column(name = "fecha_acceso", nullable = false)

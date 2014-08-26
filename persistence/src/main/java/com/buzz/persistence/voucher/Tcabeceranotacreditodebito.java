@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name="TCABECERANOTACREDITODEBITO")
+@Table(name = "TCABECERANOTACREDITODEBITO", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcabeceranotacreditodebito.findAll", query = "SELECT t FROM Tcabeceranotacreditodebito t"),
@@ -59,7 +59,7 @@ public class Tcabeceranotacreditodebito implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "ccnotacd", nullable = false)
     private Integer ccnotacd;
     @Basic(optional = false)
     @Column(name = "fecha_emision", nullable = false)
@@ -80,7 +80,7 @@ public class Tcabeceranotacreditodebito implements Serializable {
     private String contribuyenteEspecial;
     @Column(name = "obligado_contabilidad", length = 2)
     private String obligadoContabilidad;
-    @Column(length = 40)
+    @Column(name = "rise", length = 40)
     private String rise;
     @Basic(optional = false)
     @Column(name = "codigo_doc_modificado", nullable = false, length = 2)
@@ -97,9 +97,9 @@ public class Tcabeceranotacreditodebito implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "valor_modificacion", precision = 14, scale = 2)
     private Float valorModificacion;
-    @Column(length = 15)
+    @Column(name = "moneda", length = 15)
     private String moneda;
-    @Column(length = 300)
+    @Column(name = "motivo", length = 300)
     private String motivo;
     @Column(name = "valor_total", precision = 14, scale = 2)
     private Float valorTotal;

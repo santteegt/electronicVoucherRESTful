@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name="TCABECERARETENCION")
+@Table(name = "TCABECERARETENCION", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcabeceraretencion.findAll", query = "SELECT t FROM Tcabeceraretencion t"),
@@ -51,7 +51,7 @@ public class Tcabeceraretencion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "ccretencion", nullable = false)
     private Integer ccretencion;
     @Basic(optional = false)
     @Column(name = "fecha_emision", nullable = false)

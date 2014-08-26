@@ -21,7 +21,7 @@ public class TsesioncomprobantePK implements Serializable {
     @Column(name = "ccontribuyente_fk", nullable = false)
     private int ccontribuyenteFk;
     @Basic(optional = false)
-    @Column(nullable = false, length = 30)
+    @Column(name = "idpeticion", nullable = false, length = 30)
     private String idpeticion;
 
     public TsesioncomprobantePK() {

@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author buzz
  */
 @Entity
-@Table(name= "TDETALLERETENCION")
+@Table(name = "TDETALLERETENCION", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tdetalleretencion.findAll", query = "SELECT t FROM Tdetalleretencion t"),
@@ -45,7 +45,7 @@ public class Tdetalleretencion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "cdretencion", nullable = false)
     private Integer cdretencion;
     @Basic(optional = false)
     @Column(name = "codigo_retencion", nullable = false, length = 5)

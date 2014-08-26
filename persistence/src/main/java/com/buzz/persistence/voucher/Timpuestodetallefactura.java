@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author buzz
  */
 @Entity
-@Table(name= "TIMPUESTODETALLEFACTURA")
+@Table(name = "TIMPUESTODETALLEFACTURA", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Timpuestodetallefactura.findAll", query = "SELECT t FROM Timpuestodetallefactura t"),
@@ -40,22 +40,22 @@ public class Timpuestodetallefactura implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "cidfactura", nullable = false)
     private Integer cidfactura;
     @Basic(optional = false)
-    @Column(nullable = false, length = 1)
+    @Column(name = "codigo", nullable = false, length = 1)
     private String codigo;
     @Basic(optional = false)
     @Column(name = "codigo_porcentaje", nullable = false, length = 4)
     private String codigoPorcentaje;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(precision = 4, scale = 2)
+    @Column(name = "tarifa", precision = 4, scale = 2)
     private Float tarifa;
     @Basic(optional = false)
     @Column(name = "base_imponible", nullable = false)
     private float baseImponible;
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "valor", nullable = false)
     private float valor;
     @JoinColumn(name = "cdfactura_fk", referencedColumnName = "cdfactura", nullable = false)
     @ManyToOne(optional = false)

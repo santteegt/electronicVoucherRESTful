@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author buzz
  */
 @Entity
-@Table(name="TCABECERAFACTURAIMPUESTO")
+@Table(name = "TCABECERAFACTURAIMPUESTO", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcabecerafacturaimpuesto.findAll", query = "SELECT t FROM Tcabecerafacturaimpuesto t"),
@@ -40,10 +40,10 @@ public class Tcabecerafacturaimpuesto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "ccfimpuesto", nullable = false)
     private Integer ccfimpuesto;
     @Basic(optional = false)
-    @Column(nullable = false, length = 1)
+    @Column(name = "codigo", nullable = false, length = 1)
     private String codigo;
     @Basic(optional = false)
     @Column(name = "codigo_porcentaje", nullable = false, length = 4)
@@ -52,10 +52,10 @@ public class Tcabecerafacturaimpuesto implements Serializable {
     @Column(name = "base_imponible", nullable = false)
     private float baseImponible;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(precision = 14, scale = 2)
+    @Column(name = "tarifa", precision = 14, scale = 2)
     private Float tarifa;
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "valor", nullable = false)
     private float valor;
     @JoinColumn(name = "ccfactura_fk", referencedColumnName = "ccfactura", nullable = false)
     @ManyToOne(optional = false)

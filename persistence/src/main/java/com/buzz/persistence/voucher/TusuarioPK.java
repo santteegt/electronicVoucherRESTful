@@ -24,7 +24,7 @@ public class TusuarioPK implements Serializable {
     @Column(name = "cusuario_fk", nullable = false, length = 10)
     private String cusuarioFk;
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "fhasta", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fhasta;
 

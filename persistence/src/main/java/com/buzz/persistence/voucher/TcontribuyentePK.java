@@ -21,10 +21,10 @@ import javax.persistence.TemporalType;
 @Embeddable
 public class TcontribuyentePK implements Serializable {
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "ccontribuyente", nullable = false)
     private int ccontribuyente;
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "fhasta", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fhasta;
 

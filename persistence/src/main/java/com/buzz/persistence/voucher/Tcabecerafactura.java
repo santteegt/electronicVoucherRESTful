@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name="TCABECERAFACTURA")
+@Table(name = "TCABECERAFACTURA", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcabecerafactura.findAll", query = "SELECT t FROM Tcabecerafactura t"),
@@ -56,7 +56,7 @@ public class Tcabecerafactura implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "ccfactura", nullable = false)
     private Integer ccfactura;
     @Basic(optional = false)
     @Column(name = "fecha_emision", nullable = false)
@@ -86,12 +86,12 @@ public class Tcabecerafactura implements Serializable {
     @Column(name = "total_descuentos", nullable = false)
     private float totalDescuentos;
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "propina", nullable = false)
     private float propina;
     @Basic(optional = false)
     @Column(name = "importe_total", nullable = false)
     private float importeTotal;
-    @Column(length = 15)
+    @Column(name = "moneda", length = 15)
     private String moneda;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccfacturaFk")
     private List<Tretencionfactura> tretencionfacturaList;

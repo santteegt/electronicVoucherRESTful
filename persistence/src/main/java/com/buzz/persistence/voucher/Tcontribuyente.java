@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name="TCONTRIBUYENTE", uniqueConstraints = {
+@Table(name = "TCONTRIBUYENTE", catalog = "buzzSRI", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"identificacion"})})
 @XmlRootElement
 @NamedQueries({
@@ -48,11 +48,11 @@ public class Tcontribuyente implements Serializable {
     @EmbeddedId
     protected TcontribuyentePK tcontribuyentePK;
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "fdesde", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fdesde;
     @Basic(optional = false)
-    @Column(nullable = false, length = 13)
+    @Column(name = "identificacion", nullable = false, length = 13)
     private String identificacion;
     @Basic(optional = false)
     @Column(name = "razon_social", nullable = false, length = 300)
@@ -60,6 +60,7 @@ public class Tcontribuyente implements Serializable {
     @Column(name = "nombre_comercial", length = 300)
     private String nombreComercial;
     @Lob
+    @Column(name = "logo")
     private byte[] logo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccontribuyenteFk")
     private List<Tusuarioid> tusuarioidList;

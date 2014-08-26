@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name="TDESTINATARIOGUIAREMISION")
+@Table(name = "TDESTINATARIOGUIAREMISION", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tdestinatarioguiaremision.findAll", query = "SELECT t FROM Tdestinatarioguiaremision t"),
@@ -53,7 +53,7 @@ public class Tdestinatarioguiaremision implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "cdgremision", nullable = false)
     private Integer cdgremision;
     @Basic(optional = false)
     @Column(name = "identificacion_destinatario", nullable = false, length = 13)
@@ -71,7 +71,7 @@ public class Tdestinatarioguiaremision implements Serializable {
     private String documentoAduaneroUnico;
     @Column(name = "cestablecimiento_destino", length = 3)
     private String cestablecimientoDestino;
-    @Column(length = 300)
+    @Column(name = "ruta", length = 300)
     private String ruta;
     @Column(name = "codigo_doc_sustento", length = 2)
     private String codigoDocSustento;

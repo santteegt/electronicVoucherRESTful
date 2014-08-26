@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name= "TUSUARIOID")
+@Table(name = "TUSUARIOID", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tusuarioid.findAll", query = "SELECT t FROM Tusuarioid t"),
@@ -37,11 +37,11 @@ public class Tusuarioid implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(nullable = false, length = 10)
+    @Column(name = "cusuario", nullable = false, length = 10)
     private String cusuario;
     @JoinColumns({
-     @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false, insertable = false, updatable = false),
-     @JoinColumn(name = "fhasta", referencedColumnName = "fhasta", nullable = false, insertable = false, updatable = false)
+     @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false),
+     @JoinColumn(name = "fhasta", referencedColumnName = "fhasta", nullable = false)
     })
     @ManyToOne(optional = false)
     private Tcontribuyente ccontribuyenteFk;

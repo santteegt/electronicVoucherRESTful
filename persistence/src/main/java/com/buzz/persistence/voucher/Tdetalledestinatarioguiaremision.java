@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name= "TDETALLEDESTINATARIOGUIAREMISION")
+@Table(name = "TDETALLEDESTINATARIOGUIAREMISION", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tdetalledestinatarioguiaremision.findAll", query = "SELECT t FROM Tdetalledestinatarioguiaremision t"),
@@ -43,7 +43,7 @@ public class Tdetalledestinatarioguiaremision implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "cddgremision", nullable = false)
     private Integer cddgremision;
     @Basic(optional = false)
     @Column(name = "codigo_interno", nullable = false, length = 25)
@@ -51,10 +51,10 @@ public class Tdetalledestinatarioguiaremision implements Serializable {
     @Column(name = "codigo_adicional", length = 25)
     private String codigoAdicional;
     @Basic(optional = false)
-    @Column(nullable = false, length = 300)
+    @Column(name = "descripcion", nullable = false, length = 300)
     private String descripcion;
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "cantidad", nullable = false)
     private float cantidad;
     @JoinColumn(name = "cdgremision_fk", referencedColumnName = "cdgremision", nullable = false)
     @ManyToOne(optional = false)

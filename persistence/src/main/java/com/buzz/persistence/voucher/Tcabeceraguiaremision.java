@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name="TCABECERAGUIAREMISION")
+@Table(name = "TCABECERAGUIAREMISION", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcabeceraguiaremision.findAll", query = "SELECT t FROM Tcabeceraguiaremision t"),
@@ -54,7 +54,7 @@ public class Tcabeceraguiaremision implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(name = "ccgremision", nullable = false)
     private Integer ccgremision;
     @Column(name = "direccion_establecimiento", length = 300)
     private String direccionEstablecimiento;
@@ -70,7 +70,7 @@ public class Tcabeceraguiaremision implements Serializable {
     @Basic(optional = false)
     @Column(name = "ruc_transportista", nullable = false, length = 13)
     private String rucTransportista;
-    @Column(length = 40)
+    @Column(name = "rise", length = 40)
     private String rise;
     @Column(name = "obligado_contabilidad", length = 2)
     private String obligadoContabilidad;
@@ -85,7 +85,7 @@ public class Tcabeceraguiaremision implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ffinTransporte;
     @Basic(optional = false)
-    @Column(nullable = false, length = 20)
+    @Column(name = "placa", nullable = false, length = 20)
     private String placa;
     @JoinColumns({
         @JoinColumn(name = "ccontribuyente_fk2", referencedColumnName = "ccontribuyente_fk", nullable = false),

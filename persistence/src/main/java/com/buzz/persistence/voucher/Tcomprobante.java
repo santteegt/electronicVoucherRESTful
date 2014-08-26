@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author buzz
  */
 @Entity
-@Table(name="TCOMPROBANTE")
+@Table(name = "TCOMPROBANTE", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcomprobante.findAll", query = "SELECT t FROM Tcomprobante t"),
@@ -51,7 +51,7 @@ public class Tcomprobante implements Serializable {
     @EmbeddedId
     protected TcomprobantePK tcomprobantePK;
     @Basic(optional = false)
-    @Column(nullable = false, length = 1)
+    @Column(name = "ambiente", nullable = false, length = 1)
     private String ambiente;
     @Basic(optional = false)
     @Column(name = "tipo_emision", nullable = false, length = 1)
@@ -62,7 +62,7 @@ public class Tcomprobante implements Serializable {
     @Column(name = "nombre_comercial", length = 300)
     private String nombreComercial;
     @Basic(optional = false)
-    @Column(nullable = false, length = 13)
+    @Column(name = "ruc", nullable = false, length = 13)
     private String ruc;
     @Basic(optional = false)
     @Column(name = "clave_acceso", nullable = false, length = 49)
@@ -71,13 +71,13 @@ public class Tcomprobante implements Serializable {
     @Column(name = "codigo_documento", nullable = false, length = 2)
     private String codigoDocumento;
     @Basic(optional = false)
-    @Column(nullable = false, length = 3)
+    @Column(name = "establecimiento", nullable = false, length = 3)
     private String establecimiento;
     @Basic(optional = false)
     @Column(name = "punto_emision", nullable = false, length = 3)
     private String puntoEmision;
     @Basic(optional = false)
-    @Column(nullable = false, length = 9)
+    @Column(name = "secuencial", nullable = false, length = 9)
     private String secuencial;
     @Basic(optional = false)
     @Column(name = "direccion_matriz", nullable = false, length = 300)
