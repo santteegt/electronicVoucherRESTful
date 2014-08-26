@@ -1,53 +1,119 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-
-import javax.persistence.*;
-
-import java.util.Date;
-
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the TUSUARIO database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Tusuarioid.findAll", query="SELECT t FROM Tusuario t")
-public class Tusuarioid implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "TUSUARIOID", catalog = "buzzSRI", schema = "")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tusuarioid.findAll", query = "SELECT t FROM Tusuarioid t"),
+    @NamedQuery(name = "Tusuarioid.findByCusuario", query = "SELECT t FROM Tusuarioid t WHERE t.cusuario = :cusuario")})
+public class Tusuarioid implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "cusuario", nullable = false, length = 10)
+    private String cusuario;
+    @JoinColumns({
+     @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false),
+     @JoinColumn(name = "fhasta", referencedColumnName = "fhasta", nullable = false)
+    })
+    @ManyToOne(optional = false)
+    private Tcontribuyente ccontribuyenteFk;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tusuarioid")
+    private List<Tusuario> tusuarioList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusuarioFk")
+    private List<Tusuariosesion> tusuariosesionList;
 
-	@Id
-	private String cusuario;
+    public Tusuarioid() {
+    }
 
-	//uni-directional many-to-one association to Tusuarioid
-	@ManyToOne
-	@JoinColumn(name="ccontribuyente_fk")
-	private Tcontribuyente tcontribuyente;
+    public Tusuarioid(String cusuario) {
+        this.cusuario = cusuario;
+    }
 
-	public Tusuarioid() {
-	}
-	
+    public String getCusuario() {
+        return cusuario;
+    }
 
-	public Tusuarioid(String cusuario, Tcontribuyente tcontribuyente) {
-		this.cusuario = cusuario;
-		this.tcontribuyente = tcontribuyente;
-	}
+    public void setCusuario(String cusuario) {
+        this.cusuario = cusuario;
+    }
 
+    public Tcontribuyente getCcontribuyenteFk() {
+        return ccontribuyenteFk;
+    }
 
-	public String getCusuario() {
-		return this.cusuario;
-	}
+    public void setCcontribuyenteFk(Tcontribuyente ccontribuyenteFk) {
+        this.ccontribuyenteFk = ccontribuyenteFk;
+    }
 
-	public void setCusuario(String cusuario) {
-		this.cusuario = cusuario;
-	}
-	
-	public Tcontribuyente getTcontribuyente() {
-		return tcontribuyente;
-	}
+    @XmlTransient
+    public List<Tusuario> getTusuarioList() {
+        return tusuarioList;
+    }
 
-	public void setTcontribuyente(Tcontribuyente tcontribuyente) {
-		this.tcontribuyente = tcontribuyente;
-	}
+    public void setTusuarioList(List<Tusuario> tusuarioList) {
+        this.tusuarioList = tusuarioList;
+    }
 
+    @XmlTransient
+    public List<Tusuariosesion> getTusuariosesionList() {
+        return tusuariosesionList;
+    }
+
+    public void setTusuariosesionList(List<Tusuariosesion> tusuariosesionList) {
+        this.tusuariosesionList = tusuariosesionList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (cusuario != null ? cusuario.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tusuarioid)) {
+            return false;
+        }
+        Tusuarioid other = (Tusuarioid) object;
+        if ((this.cusuario == null && other.cusuario != null) || (this.cusuario != null && !this.cusuario.equals(other.cusuario))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Tusuarioid[ cusuario=" + cusuario + " ]";
+    }
+    
 }

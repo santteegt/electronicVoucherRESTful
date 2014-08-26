@@ -1,116 +1,176 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the TSESIONCOMPROBANTE database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Tsesioncomprobante.findAll", query="SELECT t FROM Tsesioncomprobante t")
-public class Tsesioncomprobante implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "TSESIONCOMPROBANTE", catalog = "buzzSRI", schema = "")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tsesioncomprobante.findAll", query = "SELECT t FROM Tsesioncomprobante t"),
+    @NamedQuery(name = "Tsesioncomprobante.findByCcontribuyenteFk", query = "SELECT t FROM Tsesioncomprobante t WHERE t.tsesioncomprobantePK.ccontribuyenteFk = :ccontribuyenteFk"),
+    @NamedQuery(name = "Tsesioncomprobante.findByIdpeticion", query = "SELECT t FROM Tsesioncomprobante t WHERE t.tsesioncomprobantePK.idpeticion = :idpeticion"),
+    @NamedQuery(name = "Tsesioncomprobante.findByCsesionFk", query = "SELECT t FROM Tsesioncomprobante t WHERE t.csesionFk = :csesionFk")})
+public class Tsesioncomprobante implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected TsesioncomprobantePK tsesioncomprobantePK;
+    @Basic(optional = false)
+    @Column(name = "csesion_fk", nullable = false, length = 30)
+    private String csesionFk;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "mensaje_entrada", nullable = false, length = 65535)
+    private String mensajeEntrada;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "mensaje_salida", nullable = false, length = 65535)
+    private String mensajeSalida;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "xml_comprobante", nullable = false, length = 65535)
+    private String xmlComprobante;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "resultado", nullable = false, length = 65535)
+    private String resultado;
+    @Lob
+    @Column(name = "codigos_error", length = 65535)
+    private String codigosError;
+    @JoinColumns({
+        @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente_fk", nullable = false, insertable = false, updatable = false),
+        @JoinColumn(name = "idpeticion", referencedColumnName = "idpeticion", nullable = false, insertable = false, updatable = false)})
+    @OneToOne(optional = false)
+    private Tcomprobante tcomprobante;
 
-	@EmbeddedId
-	private TsesioncomprobantePK id;
+    public Tsesioncomprobante() {
+    }
 
-	@Lob
-	@Column(name="codigos_error")
-	private String codigosError;
+    public Tsesioncomprobante(TsesioncomprobantePK tsesioncomprobantePK) {
+        this.tsesioncomprobantePK = tsesioncomprobantePK;
+    }
 
-	@Column(name="csesion_fk")
-	private String csesionFk;
+    public Tsesioncomprobante(TsesioncomprobantePK tsesioncomprobantePK, String csesionFk, String mensajeEntrada, String mensajeSalida, String xmlComprobante, String resultado) {
+        this.tsesioncomprobantePK = tsesioncomprobantePK;
+        this.csesionFk = csesionFk;
+        this.mensajeEntrada = mensajeEntrada;
+        this.mensajeSalida = mensajeSalida;
+        this.xmlComprobante = xmlComprobante;
+        this.resultado = resultado;
+    }
 
-	@Lob
-	@Column(name="mensaje_entrada")
-	private String mensajeEntrada;
+    public Tsesioncomprobante(int ccontribuyenteFk, String idpeticion) {
+        this.tsesioncomprobantePK = new TsesioncomprobantePK(ccontribuyenteFk, idpeticion);
+    }
 
-	@Lob
-	@Column(name="mensaje_salida")
-	private String mensajeSalida;
+    public TsesioncomprobantePK getTsesioncomprobantePK() {
+        return tsesioncomprobantePK;
+    }
 
-	@Lob
-	private String resultado;
+    public void setTsesioncomprobantePK(TsesioncomprobantePK tsesioncomprobantePK) {
+        this.tsesioncomprobantePK = tsesioncomprobantePK;
+    }
 
-	@Lob
-	@Column(name="xml_comprobante")
-	private String xmlComprobante;
+    public String getCsesionFk() {
+        return csesionFk;
+    }
 
-	//bi-directional many-to-one association to Tcomprobante
-	@ManyToOne
-	@JoinColumns({
-		@JoinColumn(name="ccontribuyente_fk", referencedColumnName="ccontribuyente_fk"),
-		@JoinColumn(name="idpeticion", referencedColumnName="idpeticion")
-		})
-	private Tcomprobante tcomprobante;
+    public void setCsesionFk(String csesionFk) {
+        this.csesionFk = csesionFk;
+    }
 
-	public Tsesioncomprobante() {
-	}
+    public String getMensajeEntrada() {
+        return mensajeEntrada;
+    }
 
-	public TsesioncomprobantePK getId() {
-		return this.id;
-	}
+    public void setMensajeEntrada(String mensajeEntrada) {
+        this.mensajeEntrada = mensajeEntrada;
+    }
 
-	public void setId(TsesioncomprobantePK id) {
-		this.id = id;
-	}
+    public String getMensajeSalida() {
+        return mensajeSalida;
+    }
 
-	public String getCodigosError() {
-		return this.codigosError;
-	}
+    public void setMensajeSalida(String mensajeSalida) {
+        this.mensajeSalida = mensajeSalida;
+    }
 
-	public void setCodigosError(String codigosError) {
-		this.codigosError = codigosError;
-	}
+    public String getXmlComprobante() {
+        return xmlComprobante;
+    }
 
-	public String getCsesionFk() {
-		return this.csesionFk;
-	}
+    public void setXmlComprobante(String xmlComprobante) {
+        this.xmlComprobante = xmlComprobante;
+    }
 
-	public void setCsesionFk(String csesionFk) {
-		this.csesionFk = csesionFk;
-	}
+    public String getResultado() {
+        return resultado;
+    }
 
-	public String getMensajeEntrada() {
-		return this.mensajeEntrada;
-	}
+    public void setResultado(String resultado) {
+        this.resultado = resultado;
+    }
 
-	public void setMensajeEntrada(String mensajeEntrada) {
-		this.mensajeEntrada = mensajeEntrada;
-	}
+    public String getCodigosError() {
+        return codigosError;
+    }
 
-	public String getMensajeSalida() {
-		return this.mensajeSalida;
-	}
+    public void setCodigosError(String codigosError) {
+        this.codigosError = codigosError;
+    }
 
-	public void setMensajeSalida(String mensajeSalida) {
-		this.mensajeSalida = mensajeSalida;
-	}
+    public Tcomprobante getTcomprobante() {
+        return tcomprobante;
+    }
 
-	public String getResultado() {
-		return this.resultado;
-	}
+    public void setTcomprobante(Tcomprobante tcomprobante) {
+        this.tcomprobante = tcomprobante;
+    }
 
-	public void setResultado(String resultado) {
-		this.resultado = resultado;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (tsesioncomprobantePK != null ? tsesioncomprobantePK.hashCode() : 0);
+        return hash;
+    }
 
-	public String getXmlComprobante() {
-		return this.xmlComprobante;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tsesioncomprobante)) {
+            return false;
+        }
+        Tsesioncomprobante other = (Tsesioncomprobante) object;
+        if ((this.tsesioncomprobantePK == null && other.tsesioncomprobantePK != null) || (this.tsesioncomprobantePK != null && !this.tsesioncomprobantePK.equals(other.tsesioncomprobantePK))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setXmlComprobante(String xmlComprobante) {
-		this.xmlComprobante = xmlComprobante;
-	}
-
-	public Tcomprobante getTcomprobante() {
-		return this.tcomprobante;
-	}
-
-	public void setTcomprobante(Tcomprobante tcomprobante) {
-		this.tcomprobante = tcomprobante;
-	}
-
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Tsesioncomprobante[ tsesioncomprobantePK=" + tsesioncomprobantePK + " ]";
+    }
+    
 }

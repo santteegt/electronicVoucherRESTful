@@ -1,123 +1,187 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the TDETALLERETENCION database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Tdetalleretencion.findAll", query="SELECT t FROM Tdetalleretencion t")
-public class Tdetalleretencion implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "TDETALLERETENCION", catalog = "buzzSRI", schema = "")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tdetalleretencion.findAll", query = "SELECT t FROM Tdetalleretencion t"),
+    @NamedQuery(name = "Tdetalleretencion.findByCdretencion", query = "SELECT t FROM Tdetalleretencion t WHERE t.cdretencion = :cdretencion"),
+    @NamedQuery(name = "Tdetalleretencion.findByCodigoRetencion", query = "SELECT t FROM Tdetalleretencion t WHERE t.codigoRetencion = :codigoRetencion"),
+    @NamedQuery(name = "Tdetalleretencion.findByBaseImponible", query = "SELECT t FROM Tdetalleretencion t WHERE t.baseImponible = :baseImponible"),
+    @NamedQuery(name = "Tdetalleretencion.findByPorcentajeRetener", query = "SELECT t FROM Tdetalleretencion t WHERE t.porcentajeRetener = :porcentajeRetener"),
+    @NamedQuery(name = "Tdetalleretencion.findByValorRetenido", query = "SELECT t FROM Tdetalleretencion t WHERE t.valorRetenido = :valorRetenido"),
+    @NamedQuery(name = "Tdetalleretencion.findByCodDocSustento", query = "SELECT t FROM Tdetalleretencion t WHERE t.codDocSustento = :codDocSustento"),
+    @NamedQuery(name = "Tdetalleretencion.findByNumDocSustento", query = "SELECT t FROM Tdetalleretencion t WHERE t.numDocSustento = :numDocSustento"),
+    @NamedQuery(name = "Tdetalleretencion.findByFechaEmisionDocSustento", query = "SELECT t FROM Tdetalleretencion t WHERE t.fechaEmisionDocSustento = :fechaEmisionDocSustento")})
+public class Tdetalleretencion implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "cdretencion", nullable = false)
+    private Integer cdretencion;
+    @Basic(optional = false)
+    @Column(name = "codigo_retencion", nullable = false, length = 5)
+    private String codigoRetencion;
+    @Basic(optional = false)
+    @Column(name = "base_imponible", nullable = false)
+    private float baseImponible;
+    @Basic(optional = false)
+    @Column(name = "porcentaje_retener", nullable = false)
+    private float porcentajeRetener;
+    @Basic(optional = false)
+    @Column(name = "valor_retenido", nullable = false)
+    private float valorRetenido;
+    @Basic(optional = false)
+    @Column(name = "cod_doc_sustento", nullable = false, length = 2)
+    private String codDocSustento;
+    @Column(name = "num_doc_sustento", length = 17)
+    private String numDocSustento;
+    @Column(name = "fecha_emision_doc_sustento")
+    @Temporal(TemporalType.DATE)
+    private Date fechaEmisionDocSustento;
+    @JoinColumn(name = "ccretencion_fk", referencedColumnName = "ccretencion", nullable = false)
+    @ManyToOne(optional = false)
+    private Tcabeceraretencion ccretencionFk;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int cdretencion;
+    public Tdetalleretencion() {
+    }
 
-	@Column(name="base_imponible")
-	private float baseImponible;
+    public Tdetalleretencion(Integer cdretencion) {
+        this.cdretencion = cdretencion;
+    }
 
-	@Column(name="cod_doc_sustento")
-	private String codDocSustento;
+    public Tdetalleretencion(Integer cdretencion, String codigoRetencion, float baseImponible, float porcentajeRetener, float valorRetenido, String codDocSustento) {
+        this.cdretencion = cdretencion;
+        this.codigoRetencion = codigoRetencion;
+        this.baseImponible = baseImponible;
+        this.porcentajeRetener = porcentajeRetener;
+        this.valorRetenido = valorRetenido;
+        this.codDocSustento = codDocSustento;
+    }
 
-	@Column(name="codigo_retencion")
-	private String codigoRetencion;
+    public Integer getCdretencion() {
+        return cdretencion;
+    }
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_emision_doc_sustento")
-	private Date fechaEmisionDocSustento;
+    public void setCdretencion(Integer cdretencion) {
+        this.cdretencion = cdretencion;
+    }
 
-	@Column(name="num_doc_sustento")
-	private String numDocSustento;
+    public String getCodigoRetencion() {
+        return codigoRetencion;
+    }
 
-	@Column(name="porcentaje_retener")
-	private float porcentajeRetener;
+    public void setCodigoRetencion(String codigoRetencion) {
+        this.codigoRetencion = codigoRetencion;
+    }
 
-	@Column(name="valor_retenido")
-	private float valorRetenido;
+    public float getBaseImponible() {
+        return baseImponible;
+    }
 
-	//bi-directional many-to-one association to Tcabeceraretencion
-	@ManyToOne
-	@JoinColumn(name="ccretencion_fk")
-	private Tcabeceraretencion tcabeceraretencion;
+    public void setBaseImponible(float baseImponible) {
+        this.baseImponible = baseImponible;
+    }
 
-	public Tdetalleretencion() {
-	}
+    public float getPorcentajeRetener() {
+        return porcentajeRetener;
+    }
 
-	public int getCdretencion() {
-		return this.cdretencion;
-	}
+    public void setPorcentajeRetener(float porcentajeRetener) {
+        this.porcentajeRetener = porcentajeRetener;
+    }
 
-	public void setCdretencion(int cdretencion) {
-		this.cdretencion = cdretencion;
-	}
+    public float getValorRetenido() {
+        return valorRetenido;
+    }
 
-	public float getBaseImponible() {
-		return this.baseImponible;
-	}
+    public void setValorRetenido(float valorRetenido) {
+        this.valorRetenido = valorRetenido;
+    }
 
-	public void setBaseImponible(float baseImponible) {
-		this.baseImponible = baseImponible;
-	}
+    public String getCodDocSustento() {
+        return codDocSustento;
+    }
 
-	public String getCodDocSustento() {
-		return this.codDocSustento;
-	}
+    public void setCodDocSustento(String codDocSustento) {
+        this.codDocSustento = codDocSustento;
+    }
 
-	public void setCodDocSustento(String codDocSustento) {
-		this.codDocSustento = codDocSustento;
-	}
+    public String getNumDocSustento() {
+        return numDocSustento;
+    }
 
-	public String getCodigoRetencion() {
-		return this.codigoRetencion;
-	}
+    public void setNumDocSustento(String numDocSustento) {
+        this.numDocSustento = numDocSustento;
+    }
 
-	public void setCodigoRetencion(String codigoRetencion) {
-		this.codigoRetencion = codigoRetencion;
-	}
+    public Date getFechaEmisionDocSustento() {
+        return fechaEmisionDocSustento;
+    }
 
-	public Date getFechaEmisionDocSustento() {
-		return this.fechaEmisionDocSustento;
-	}
+    public void setFechaEmisionDocSustento(Date fechaEmisionDocSustento) {
+        this.fechaEmisionDocSustento = fechaEmisionDocSustento;
+    }
 
-	public void setFechaEmisionDocSustento(Date fechaEmisionDocSustento) {
-		this.fechaEmisionDocSustento = fechaEmisionDocSustento;
-	}
+    public Tcabeceraretencion getCcretencionFk() {
+        return ccretencionFk;
+    }
 
-	public String getNumDocSustento() {
-		return this.numDocSustento;
-	}
+    public void setCcretencionFk(Tcabeceraretencion ccretencionFk) {
+        this.ccretencionFk = ccretencionFk;
+    }
 
-	public void setNumDocSustento(String numDocSustento) {
-		this.numDocSustento = numDocSustento;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (cdretencion != null ? cdretencion.hashCode() : 0);
+        return hash;
+    }
 
-	public float getPorcentajeRetener() {
-		return this.porcentajeRetener;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tdetalleretencion)) {
+            return false;
+        }
+        Tdetalleretencion other = (Tdetalleretencion) object;
+        if ((this.cdretencion == null && other.cdretencion != null) || (this.cdretencion != null && !this.cdretencion.equals(other.cdretencion))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setPorcentajeRetener(float porcentajeRetener) {
-		this.porcentajeRetener = porcentajeRetener;
-	}
-
-	public float getValorRetenido() {
-		return this.valorRetenido;
-	}
-
-	public void setValorRetenido(float valorRetenido) {
-		this.valorRetenido = valorRetenido;
-	}
-
-	public Tcabeceraretencion getTcabeceraretencion() {
-		return this.tcabeceraretencion;
-	}
-
-	public void setTcabeceraretencion(Tcabeceraretencion tcabeceraretencion) {
-		this.tcabeceraretencion = tcabeceraretencion;
-	}
-
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Tdetalleretencion[ cdretencion=" + cdretencion + " ]";
+    }
+    
 }

@@ -1,113 +1,161 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the TDETALLEDESTINATARIOGUIAREMISION database table.
- * 
+ *
+ * @author buzz
  */
 @Entity
-@NamedQuery(name="Tdetalledestinatarioguiaremision.findAll", query="SELECT t FROM Tdetalledestinatarioguiaremision t")
-public class Tdetalledestinatarioguiaremision implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "TDETALLEDESTINATARIOGUIAREMISION", catalog = "buzzSRI", schema = "")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tdetalledestinatarioguiaremision.findAll", query = "SELECT t FROM Tdetalledestinatarioguiaremision t"),
+    @NamedQuery(name = "Tdetalledestinatarioguiaremision.findByCddgremision", query = "SELECT t FROM Tdetalledestinatarioguiaremision t WHERE t.cddgremision = :cddgremision"),
+    @NamedQuery(name = "Tdetalledestinatarioguiaremision.findByCodigoInterno", query = "SELECT t FROM Tdetalledestinatarioguiaremision t WHERE t.codigoInterno = :codigoInterno"),
+    @NamedQuery(name = "Tdetalledestinatarioguiaremision.findByCodigoAdicional", query = "SELECT t FROM Tdetalledestinatarioguiaremision t WHERE t.codigoAdicional = :codigoAdicional"),
+    @NamedQuery(name = "Tdetalledestinatarioguiaremision.findByDescripcion", query = "SELECT t FROM Tdetalledestinatarioguiaremision t WHERE t.descripcion = :descripcion"),
+    @NamedQuery(name = "Tdetalledestinatarioguiaremision.findByCantidad", query = "SELECT t FROM Tdetalledestinatarioguiaremision t WHERE t.cantidad = :cantidad")})
+public class Tdetalledestinatarioguiaremision implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "cddgremision", nullable = false)
+    private Integer cddgremision;
+    @Basic(optional = false)
+    @Column(name = "codigo_interno", nullable = false, length = 25)
+    private String codigoInterno;
+    @Column(name = "codigo_adicional", length = 25)
+    private String codigoAdicional;
+    @Basic(optional = false)
+    @Column(name = "descripcion", nullable = false, length = 300)
+    private String descripcion;
+    @Basic(optional = false)
+    @Column(name = "cantidad", nullable = false)
+    private float cantidad;
+    @JoinColumn(name = "cdgremision_fk", referencedColumnName = "cdgremision", nullable = false)
+    @ManyToOne(optional = false)
+    private Tdestinatarioguiaremision cdgremisionFk;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cddgremisionFk")
+    private List<Tdetalleadicionaldestinatarioguiaremision> tdetalleadicionaldestinatarioguiaremisionList;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int cddgremision;
+    public Tdetalledestinatarioguiaremision() {
+    }
 
-	private float cantidad;
+    public Tdetalledestinatarioguiaremision(Integer cddgremision) {
+        this.cddgremision = cddgremision;
+    }
 
-	@Column(name="codigo_adicional")
-	private String codigoAdicional;
+    public Tdetalledestinatarioguiaremision(Integer cddgremision, String codigoInterno, String descripcion, float cantidad) {
+        this.cddgremision = cddgremision;
+        this.codigoInterno = codigoInterno;
+        this.descripcion = descripcion;
+        this.cantidad = cantidad;
+    }
 
-	@Column(name="codigo_interno")
-	private String codigoInterno;
+    public Integer getCddgremision() {
+        return cddgremision;
+    }
 
-	private String descripcion;
+    public void setCddgremision(Integer cddgremision) {
+        this.cddgremision = cddgremision;
+    }
 
-	//bi-directional many-to-one association to Tdetalleadicionaldestinatarioguiaremision
-	@OneToMany(mappedBy="tdetalledestinatarioguiaremision")
-	private List<Tdetalleadicionaldestinatarioguiaremision> tdetalleadicionaldestinatarioguiaremisions;
+    public String getCodigoInterno() {
+        return codigoInterno;
+    }
 
-	//bi-directional many-to-one association to Tdestinatarioguiaremision
-	@ManyToOne
-	@JoinColumn(name="cdgremision_fk")
-	private Tdestinatarioguiaremision tdestinatarioguiaremision;
+    public void setCodigoInterno(String codigoInterno) {
+        this.codigoInterno = codigoInterno;
+    }
 
-	public Tdetalledestinatarioguiaremision() {
-	}
+    public String getCodigoAdicional() {
+        return codigoAdicional;
+    }
 
-	public int getCddgremision() {
-		return this.cddgremision;
-	}
+    public void setCodigoAdicional(String codigoAdicional) {
+        this.codigoAdicional = codigoAdicional;
+    }
 
-	public void setCddgremision(int cddgremision) {
-		this.cddgremision = cddgremision;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public float getCantidad() {
-		return this.cantidad;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setCantidad(float cantidad) {
-		this.cantidad = cantidad;
-	}
+    public float getCantidad() {
+        return cantidad;
+    }
 
-	public String getCodigoAdicional() {
-		return this.codigoAdicional;
-	}
+    public void setCantidad(float cantidad) {
+        this.cantidad = cantidad;
+    }
 
-	public void setCodigoAdicional(String codigoAdicional) {
-		this.codigoAdicional = codigoAdicional;
-	}
+    public Tdestinatarioguiaremision getCdgremisionFk() {
+        return cdgremisionFk;
+    }
 
-	public String getCodigoInterno() {
-		return this.codigoInterno;
-	}
+    public void setCdgremisionFk(Tdestinatarioguiaremision cdgremisionFk) {
+        this.cdgremisionFk = cdgremisionFk;
+    }
 
-	public void setCodigoInterno(String codigoInterno) {
-		this.codigoInterno = codigoInterno;
-	}
+    @XmlTransient
+    public List<Tdetalleadicionaldestinatarioguiaremision> getTdetalleadicionaldestinatarioguiaremisionList() {
+        return tdetalleadicionaldestinatarioguiaremisionList;
+    }
 
-	public String getDescripcion() {
-		return this.descripcion;
-	}
+    public void setTdetalleadicionaldestinatarioguiaremisionList(List<Tdetalleadicionaldestinatarioguiaremision> tdetalleadicionaldestinatarioguiaremisionList) {
+        this.tdetalleadicionaldestinatarioguiaremisionList = tdetalleadicionaldestinatarioguiaremisionList;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (cddgremision != null ? cddgremision.hashCode() : 0);
+        return hash;
+    }
 
-	public List<Tdetalleadicionaldestinatarioguiaremision> getTdetalleadicionaldestinatarioguiaremisions() {
-		return this.tdetalleadicionaldestinatarioguiaremisions;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tdetalledestinatarioguiaremision)) {
+            return false;
+        }
+        Tdetalledestinatarioguiaremision other = (Tdetalledestinatarioguiaremision) object;
+        if ((this.cddgremision == null && other.cddgremision != null) || (this.cddgremision != null && !this.cddgremision.equals(other.cddgremision))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setTdetalleadicionaldestinatarioguiaremisions(List<Tdetalleadicionaldestinatarioguiaremision> tdetalleadicionaldestinatarioguiaremisions) {
-		this.tdetalleadicionaldestinatarioguiaremisions = tdetalleadicionaldestinatarioguiaremisions;
-	}
-
-	public Tdetalleadicionaldestinatarioguiaremision addTdetalleadicionaldestinatarioguiaremision(Tdetalleadicionaldestinatarioguiaremision tdetalleadicionaldestinatarioguiaremision) {
-		getTdetalleadicionaldestinatarioguiaremisions().add(tdetalleadicionaldestinatarioguiaremision);
-		tdetalleadicionaldestinatarioguiaremision.setTdetalledestinatarioguiaremision(this);
-
-		return tdetalleadicionaldestinatarioguiaremision;
-	}
-
-	public Tdetalleadicionaldestinatarioguiaremision removeTdetalleadicionaldestinatarioguiaremision(Tdetalleadicionaldestinatarioguiaremision tdetalleadicionaldestinatarioguiaremision) {
-		getTdetalleadicionaldestinatarioguiaremisions().remove(tdetalleadicionaldestinatarioguiaremision);
-		tdetalleadicionaldestinatarioguiaremision.setTdetalledestinatarioguiaremision(null);
-
-		return tdetalleadicionaldestinatarioguiaremision;
-	}
-
-	public Tdestinatarioguiaremision getTdestinatarioguiaremision() {
-		return this.tdestinatarioguiaremision;
-	}
-
-	public void setTdestinatarioguiaremision(Tdestinatarioguiaremision tdestinatarioguiaremision) {
-		this.tdestinatarioguiaremision = tdestinatarioguiaremision;
-	}
-
+    @Override
+    public String toString() {
+        return "com.buzz.persistence.voucher.Tdetalledestinatarioguiaremision[ cddgremision=" + cddgremision + " ]";
+    }
+    
 }
