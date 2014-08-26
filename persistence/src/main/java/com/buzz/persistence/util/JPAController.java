@@ -5,14 +5,22 @@
  */
 package com.buzz.persistence.util;
 
+import com.buzz.persistence.util.exceptions.IllegalOrphanException;
+import com.buzz.persistence.util.exceptions.NonexistentEntityException;
+import com.buzz.persistence.voucher.Tcontribuyente;
+import com.buzz.persistence.voucher.Ttipocontribuyente;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -25,11 +33,11 @@ public class JPAController<T> {
 
     private T objeto;
 
-    public void GenericContoller(T objeto) {
+    public void JPAController(T objeto) {
         this.objeto = objeto;
     }
 
-    public void GenericContoller() {
+    public JPAController() {
     }
 
     public T getObjeto() {
@@ -43,10 +51,10 @@ public class JPAController<T> {
     public EntityManager getEntityManager() {
         return EntityManagerUtil.get().createEntityManager();
     }
-
+    
+    
     public void create(T objeto) {
-        EntityManager em = null;
-        em = getEntityManager();
+        EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(objeto);
@@ -64,7 +72,7 @@ public class JPAController<T> {
 //throw ex;
         } finally {
             if (em != null) {
-                em.close();
+                em.close();                
             }
         }
     }
@@ -99,6 +107,23 @@ public class JPAController<T> {
         }
     }
 
+    public void destroy(T object) throws IllegalOrphanException, NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            em.remove(em.contains(object) ? object : em.merge(object));
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    
+    
+    
     public T find(Class<T> obj, Object id) {
         EntityManager em = getEntityManager();
         System.out.println("Clase: " + obj.getClass().getName() + id);
@@ -128,6 +153,10 @@ public class JPAController<T> {
     public List<T> findEntities(int maxResults, int firstResult, T obj) {
         return findEntities(false, maxResults, firstResult, obj);
     }
+    
+    public List<T> findAllEntities(T obj) {
+        return findEntities(false, -1, 0, obj);
+    }
 
     private List<T> findEntities(boolean all, int maxResults, int firstResult, T obj) {
         EntityManager em = getEntityManager();
@@ -140,7 +169,7 @@ public class JPAController<T> {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            em.close();            
         }
     }
 

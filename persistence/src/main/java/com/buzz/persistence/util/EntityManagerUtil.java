@@ -22,4 +22,7 @@ public final class EntityManagerUtil {
     public static javax.persistence.EntityManagerFactory get() {
         return emfInstance;
     }
+    public static void close(javax.persistence.EntityManagerFactory instancia) {
+        instancia.close();
+    }
 }
