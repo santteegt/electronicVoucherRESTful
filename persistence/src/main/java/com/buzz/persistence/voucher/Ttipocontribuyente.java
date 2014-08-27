@@ -8,10 +8,12 @@ package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,9 +44,8 @@ public class Ttipocontribuyente implements Serializable {
     private Integer ctipocontribuyente;
     @Column(name = "descripcion", length = 100)
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctipocontribuyenteFk")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctipocontribuyenteFk", fetch = FetchType.LAZY )
     private List<Tcontribuyente> tcontribuyenteList;
-
     public Ttipocontribuyente() {
     }
 
@@ -67,7 +68,7 @@ public class Ttipocontribuyente implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
+    
     @XmlTransient
     public List<Tcontribuyente> getTcontribuyenteList() {
         return tcontribuyenteList;
