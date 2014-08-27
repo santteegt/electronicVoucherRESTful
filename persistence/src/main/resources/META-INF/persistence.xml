@@ -35,7 +35,7 @@
 		 <properties>
            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
            <property name="hibernate.connection.url" 
-                       value="jdbc:mysql://192.168.1.7:3306/buzzSRI"/>
+                       value="jdbc:mysql://172.16.244.172:3306/buzzSRI"/>
            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
            <property name="hibernate.connection.username" value="buzzsri"/>
            <property name="hibernate.connection.password" value="buzzsri2014"/>
