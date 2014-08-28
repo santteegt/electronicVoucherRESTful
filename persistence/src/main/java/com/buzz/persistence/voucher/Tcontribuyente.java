@@ -44,6 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Tcontribuyente.findByRazonSocial", query = "SELECT t FROM Tcontribuyente t WHERE t.razonSocial = :razonSocial"),
     @NamedQuery(name = "Tcontribuyente.findByNombreComercial", query = "SELECT t FROM Tcontribuyente t WHERE t.nombreComercial = :nombreComercial")})
 public class Tcontribuyente implements Serializable {
+    @Lob
+    private byte[] logo;
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected TcontribuyentePK tcontribuyentePK;
@@ -59,9 +61,6 @@ public class Tcontribuyente implements Serializable {
     private String razonSocial;
     @Column(name = "nombre_comercial", length = 300)
     private String nombreComercial;
-    @Lob
-    @Column(name = "logo")
-    private byte[] logo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccontribuyenteFk")
     private List<Tusuarioid> tusuarioidList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcontribuyente")
@@ -128,13 +127,6 @@ public class Tcontribuyente implements Serializable {
         this.nombreComercial = nombreComercial;
     }
 
-    public byte[] getLogo() {
-        return logo;
-    }
-
-    public void setLogo(byte[] logo) {
-        this.logo = logo;
-    }
 
     @XmlTransient
     public List<Tusuarioid> getTusuarioidList() {
@@ -185,6 +177,14 @@ public class Tcontribuyente implements Serializable {
     @Override
     public String toString() {
         return "com.buzz.persistence.voucher.Tcontribuyente[ tcontribuyentePK=" + tcontribuyentePK + " ]";
+    }
+
+    public byte[] getLogo() {
+        return logo;
+    }
+
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
     }
     
 }
