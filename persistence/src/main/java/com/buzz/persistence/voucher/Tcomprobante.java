@@ -7,29 +7,22 @@
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author buzz
  */
 @Entity
-@Table(name = "TCOMPROBANTE", catalog = "buzzSRI", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcomprobante.findAll", query = "SELECT t FROM Tcomprobante t"),
@@ -51,7 +44,7 @@ public class Tcomprobante implements Serializable {
     @EmbeddedId
     protected TcomprobantePK tcomprobantePK;
     @Basic(optional = false)
-    @Column(name = "ambiente", nullable = false, length = 1)
+    @Column(nullable = false, length = 1)
     private String ambiente;
     @Basic(optional = false)
     @Column(name = "tipo_emision", nullable = false, length = 1)
@@ -62,7 +55,7 @@ public class Tcomprobante implements Serializable {
     @Column(name = "nombre_comercial", length = 300)
     private String nombreComercial;
     @Basic(optional = false)
-    @Column(name = "ruc", nullable = false, length = 13)
+    @Column(nullable = false, length = 13)
     private String ruc;
     @Basic(optional = false)
     @Column(name = "clave_acceso", nullable = false, length = 49)
@@ -71,35 +64,22 @@ public class Tcomprobante implements Serializable {
     @Column(name = "codigo_documento", nullable = false, length = 2)
     private String codigoDocumento;
     @Basic(optional = false)
-    @Column(name = "establecimiento", nullable = false, length = 3)
+    @Column(nullable = false, length = 3)
     private String establecimiento;
     @Basic(optional = false)
     @Column(name = "punto_emision", nullable = false, length = 3)
     private String puntoEmision;
     @Basic(optional = false)
-    @Column(name = "secuencial", nullable = false, length = 9)
+    @Column(nullable = false, length = 9)
     private String secuencial;
     @Basic(optional = false)
     @Column(name = "direccion_matriz", nullable = false, length = 300)
     private String direccionMatriz;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
-    private List<Tcabeceranotacreditodebito> tcabeceranotacreditodebitoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
-    private List<Tinformacionadicionalcomprobante> tinformacionadicionalcomprobanteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
-    private List<Tcabeceraguiaremision> tcabeceraguiaremisionList;
-    @JoinColumns({
-     @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false, insertable = false, updatable = false),
-     @JoinColumn(name = "fhasta", referencedColumnName = "fhasta", nullable = false, insertable = false, updatable = false)
-    })
+    @Lob
+    private byte[] reporte;
+    @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Tcontribuyente tcontribuyente;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
-    private Tsesioncomprobante tsesioncomprobante;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
-    private List<Tcabecerafactura> tcabecerafacturaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
-    private List<Tcabeceraretencion> tcabeceraretencionList;
 
     public Tcomprobante() {
     }
@@ -222,31 +202,12 @@ public class Tcomprobante implements Serializable {
         this.direccionMatriz = direccionMatriz;
     }
 
-    @XmlTransient
-    public List<Tcabeceranotacreditodebito> getTcabeceranotacreditodebitoList() {
-        return tcabeceranotacreditodebitoList;
+    public byte[] getReporte() {
+        return reporte;
     }
 
-    public void setTcabeceranotacreditodebitoList(List<Tcabeceranotacreditodebito> tcabeceranotacreditodebitoList) {
-        this.tcabeceranotacreditodebitoList = tcabeceranotacreditodebitoList;
-    }
-
-    @XmlTransient
-    public List<Tinformacionadicionalcomprobante> getTinformacionadicionalcomprobanteList() {
-        return tinformacionadicionalcomprobanteList;
-    }
-
-    public void setTinformacionadicionalcomprobanteList(List<Tinformacionadicionalcomprobante> tinformacionadicionalcomprobanteList) {
-        this.tinformacionadicionalcomprobanteList = tinformacionadicionalcomprobanteList;
-    }
-
-    @XmlTransient
-    public List<Tcabeceraguiaremision> getTcabeceraguiaremisionList() {
-        return tcabeceraguiaremisionList;
-    }
-
-    public void setTcabeceraguiaremisionList(List<Tcabeceraguiaremision> tcabeceraguiaremisionList) {
-        this.tcabeceraguiaremisionList = tcabeceraguiaremisionList;
+    public void setReporte(byte[] reporte) {
+        this.reporte = reporte;
     }
 
     public Tcontribuyente getTcontribuyente() {
@@ -255,32 +216,6 @@ public class Tcomprobante implements Serializable {
 
     public void setTcontribuyente(Tcontribuyente tcontribuyente) {
         this.tcontribuyente = tcontribuyente;
-    }
-
-    public Tsesioncomprobante getTsesioncomprobante() {
-        return tsesioncomprobante;
-    }
-
-    public void setTsesioncomprobante(Tsesioncomprobante tsesioncomprobante) {
-        this.tsesioncomprobante = tsesioncomprobante;
-    }
-
-    @XmlTransient
-    public List<Tcabecerafactura> getTcabecerafacturaList() {
-        return tcabecerafacturaList;
-    }
-
-    public void setTcabecerafacturaList(List<Tcabecerafactura> tcabecerafacturaList) {
-        this.tcabecerafacturaList = tcabecerafacturaList;
-    }
-
-    @XmlTransient
-    public List<Tcabeceraretencion> getTcabeceraretencionList() {
-        return tcabeceraretencionList;
-    }
-
-    public void setTcabeceraretencionList(List<Tcabeceraretencion> tcabeceraretencionList) {
-        this.tcabeceraretencionList = tcabeceraretencionList;
     }
 
     @Override
