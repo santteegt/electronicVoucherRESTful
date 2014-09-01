@@ -2,7 +2,8 @@ package com.buzz.electronicvoucher;
 
 public enum ElectronicVoucherStatusTypes {
 	
-	AUTHORIZED("AUTORIZADO");
+	AUTHORIZED("AUTORIZADO"),
+	NONAUTHORIZED("NO AUTORIZADO");
 	
 	private String status;
 	
