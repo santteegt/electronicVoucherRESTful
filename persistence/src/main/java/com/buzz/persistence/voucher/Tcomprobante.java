@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -77,7 +78,10 @@ public class Tcomprobante implements Serializable {
     private String direccionMatriz;
     @Lob
     private byte[] reporte;
-    @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false, insertable = false, updatable = false)
+    @JoinColumns({
+      @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false, insertable = false, updatable = false),
+      @JoinColumn(name = "fhasta", referencedColumnName = "fhasta", nullable = false, insertable = false, updatable = false)      
+    })    
     @ManyToOne(optional = false)
     private Tcontribuyente tcontribuyente;
 
