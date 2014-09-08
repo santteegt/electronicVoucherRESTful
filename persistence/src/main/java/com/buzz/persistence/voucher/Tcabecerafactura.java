@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
@@ -30,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Entity
-@Table(name = "TCABECERAFACTURA", catalog = "buzzSRI", schema = "")
+@Table(name = "TCABECERAFACTURA")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcabecerafactura.findAll", query = "SELECT t FROM Tcabecerafactura t"),
@@ -94,6 +92,8 @@ public class Tcabecerafactura implements Serializable {
     @Column(name = "moneda", length = 15)
     private String moneda;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccfacturaFk")
+    private List<Tcabecerafacturaimpuesto> tcabecerafacturaimpuestoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccfacturaFk")
     private List<Tretencionfactura> tretencionfacturaList;
     @JoinColumns({
         @JoinColumn(name = "ccontribuyente_fk2", referencedColumnName = "ccontribuyente_fk", nullable = false),
@@ -102,8 +102,6 @@ public class Tcabecerafactura implements Serializable {
     private Tcomprobante tcomprobante;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccfacturaFk")
     private List<Tdetallefactura> tdetallefacturaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccfacturaFk")
-    private List<Tcabecerafacturaimpuesto> tcabecerafacturaimpuestoList;
 
     public Tcabecerafactura() {
     }
@@ -237,6 +235,15 @@ public class Tcabecerafactura implements Serializable {
     }
 
     @XmlTransient
+    public List<Tcabecerafacturaimpuesto> getTcabecerafacturaimpuestoList() {
+        return tcabecerafacturaimpuestoList;
+    }
+
+    public void setTcabecerafacturaimpuestoList(List<Tcabecerafacturaimpuesto> tcabecerafacturaimpuestoList) {
+        this.tcabecerafacturaimpuestoList = tcabecerafacturaimpuestoList;
+    }
+
+    @XmlTransient
     public List<Tretencionfactura> getTretencionfacturaList() {
         return tretencionfacturaList;
     }
@@ -260,15 +267,6 @@ public class Tcabecerafactura implements Serializable {
 
     public void setTdetallefacturaList(List<Tdetallefactura> tdetallefacturaList) {
         this.tdetallefacturaList = tdetallefacturaList;
-    }
-
-    @XmlTransient
-    public List<Tcabecerafacturaimpuesto> getTcabecerafacturaimpuestoList() {
-        return tcabecerafacturaimpuestoList;
-    }
-
-    public void setTcabecerafacturaimpuestoList(List<Tcabecerafacturaimpuesto> tcabecerafacturaimpuestoList) {
-        this.tcabecerafacturaimpuestoList = tcabecerafacturaimpuestoList;
     }
 
     @Override

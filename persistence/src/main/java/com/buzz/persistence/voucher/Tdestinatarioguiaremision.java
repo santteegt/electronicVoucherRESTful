@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
@@ -29,10 +27,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Entity
-@Table(name = "TDESTINATARIOGUIAREMISION", catalog = "buzzSRI", schema = "")
+@Table(name = "TDESTINATARIOGUIAREMISION")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tdestinatarioguiaremision.findAll", query = "SELECT t FROM Tdestinatarioguiaremision t"),
@@ -82,11 +80,11 @@ public class Tdestinatarioguiaremision implements Serializable {
     @Column(name = "femision_doc_sustento")
     @Temporal(TemporalType.DATE)
     private Date femisionDocSustento;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cdgremisionFk")
-    private List<Tdetalledestinatarioguiaremision> tdetalledestinatarioguiaremisionList;
     @JoinColumn(name = "ccgremision_fk", referencedColumnName = "ccgremision", nullable = false)
     @ManyToOne(optional = false)
     private Tcabeceraguiaremision ccgremisionFk;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cdgremisionFk")
+    private List<Tdetalledestinatarioguiaremision> tdetalledestinatarioguiaremisionList;
 
     public Tdestinatarioguiaremision() {
     }
@@ -199,6 +197,14 @@ public class Tdestinatarioguiaremision implements Serializable {
         this.femisionDocSustento = femisionDocSustento;
     }
 
+    public Tcabeceraguiaremision getCcgremisionFk() {
+        return ccgremisionFk;
+    }
+
+    public void setCcgremisionFk(Tcabeceraguiaremision ccgremisionFk) {
+        this.ccgremisionFk = ccgremisionFk;
+    }
+
     @XmlTransient
     public List<Tdetalledestinatarioguiaremision> getTdetalledestinatarioguiaremisionList() {
         return tdetalledestinatarioguiaremisionList;
@@ -206,14 +212,6 @@ public class Tdestinatarioguiaremision implements Serializable {
 
     public void setTdetalledestinatarioguiaremisionList(List<Tdetalledestinatarioguiaremision> tdetalledestinatarioguiaremisionList) {
         this.tdetalledestinatarioguiaremisionList = tdetalledestinatarioguiaremisionList;
-    }
-
-    public Tcabeceraguiaremision getCcgremisionFk() {
-        return ccgremisionFk;
-    }
-
-    public void setCcgremisionFk(Tcabeceraguiaremision ccgremisionFk) {
-        this.ccgremisionFk = ccgremisionFk;
     }
 
     @Override

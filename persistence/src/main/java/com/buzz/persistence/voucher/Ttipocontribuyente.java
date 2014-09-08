@@ -1,19 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
 import java.util.List;
-
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,10 +22,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Entity
-@Table(name = "TTIPOCONTRIBUYENTE", catalog = "buzzSRI", schema = "")
+@Table(name = "TTIPOCONTRIBUYENTE")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Ttipocontribuyente.findAll", query = "SELECT t FROM Ttipocontribuyente t"),
@@ -44,8 +40,9 @@ public class Ttipocontribuyente implements Serializable {
     private Integer ctipocontribuyente;
     @Column(name = "descripcion", length = 100)
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctipocontribuyenteFk", fetch = FetchType.LAZY )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ctipocontribuyenteFk")
     private List<Tcontribuyente> tcontribuyenteList;
+
     public Ttipocontribuyente() {
     }
 
@@ -68,7 +65,7 @@ public class Ttipocontribuyente implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
     @XmlTransient
     public List<Tcontribuyente> getTcontribuyenteList() {
         return tcontribuyenteList;

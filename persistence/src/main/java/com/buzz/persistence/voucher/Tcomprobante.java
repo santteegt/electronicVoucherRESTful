@@ -1,29 +1,33 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Entity
+@Table(name = "TCOMPROBANTE")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcomprobante.findAll", query = "SELECT t FROM Tcomprobante t"),
@@ -45,7 +49,7 @@ public class Tcomprobante implements Serializable {
     @EmbeddedId
     protected TcomprobantePK tcomprobantePK;
     @Basic(optional = false)
-    @Column(nullable = false, length = 1)
+    @Column(name = "ambiente", nullable = false, length = 1)
     private String ambiente;
     @Basic(optional = false)
     @Column(name = "tipo_emision", nullable = false, length = 1)
@@ -56,7 +60,7 @@ public class Tcomprobante implements Serializable {
     @Column(name = "nombre_comercial", length = 300)
     private String nombreComercial;
     @Basic(optional = false)
-    @Column(nullable = false, length = 13)
+    @Column(name = "ruc", nullable = false, length = 13)
     private String ruc;
     @Basic(optional = false)
     @Column(name = "clave_acceso", nullable = false, length = 49)
@@ -65,25 +69,35 @@ public class Tcomprobante implements Serializable {
     @Column(name = "codigo_documento", nullable = false, length = 2)
     private String codigoDocumento;
     @Basic(optional = false)
-    @Column(nullable = false, length = 3)
+    @Column(name = "establecimiento", nullable = false, length = 3)
     private String establecimiento;
     @Basic(optional = false)
     @Column(name = "punto_emision", nullable = false, length = 3)
     private String puntoEmision;
     @Basic(optional = false)
-    @Column(nullable = false, length = 9)
+    @Column(name = "secuencial", nullable = false, length = 9)
     private String secuencial;
     @Basic(optional = false)
     @Column(name = "direccion_matriz", nullable = false, length = 300)
     private String direccionMatriz;
     @Lob
+    @Column(name = "reporte")
     private byte[] reporte;
-    @JoinColumns({
-      @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false, insertable = false, updatable = false),
-      @JoinColumn(name = "fhasta", referencedColumnName = "fhasta", nullable = false, insertable = false, updatable = false)      
-    })    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
+    private List<Tinformacionadicionalcomprobante> tinformacionadicionalcomprobanteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
+    private List<Tcabeceraguiaremision> tcabeceraguiaremisionList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
+    private List<Tcabecerafactura> tcabecerafacturaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
+    private List<Tcabeceranotacreditodebito> tcabeceranotacreditodebitoList;
+    @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Tcontribuyente tcontribuyente;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
+    private List<Tcabeceraretencion> tcabeceraretencionList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "tcomprobante")
+    private Tsesioncomprobante tsesioncomprobante;
 
     public Tcomprobante() {
     }
@@ -214,12 +228,65 @@ public class Tcomprobante implements Serializable {
         this.reporte = reporte;
     }
 
+    @XmlTransient
+    public List<Tinformacionadicionalcomprobante> getTinformacionadicionalcomprobanteList() {
+        return tinformacionadicionalcomprobanteList;
+    }
+
+    public void setTinformacionadicionalcomprobanteList(List<Tinformacionadicionalcomprobante> tinformacionadicionalcomprobanteList) {
+        this.tinformacionadicionalcomprobanteList = tinformacionadicionalcomprobanteList;
+    }
+
+    @XmlTransient
+    public List<Tcabeceraguiaremision> getTcabeceraguiaremisionList() {
+        return tcabeceraguiaremisionList;
+    }
+
+    public void setTcabeceraguiaremisionList(List<Tcabeceraguiaremision> tcabeceraguiaremisionList) {
+        this.tcabeceraguiaremisionList = tcabeceraguiaremisionList;
+    }
+
+    @XmlTransient
+    public List<Tcabecerafactura> getTcabecerafacturaList() {
+        return tcabecerafacturaList;
+    }
+
+    public void setTcabecerafacturaList(List<Tcabecerafactura> tcabecerafacturaList) {
+        this.tcabecerafacturaList = tcabecerafacturaList;
+    }
+
+    @XmlTransient
+    public List<Tcabeceranotacreditodebito> getTcabeceranotacreditodebitoList() {
+        return tcabeceranotacreditodebitoList;
+    }
+
+    public void setTcabeceranotacreditodebitoList(List<Tcabeceranotacreditodebito> tcabeceranotacreditodebitoList) {
+        this.tcabeceranotacreditodebitoList = tcabeceranotacreditodebitoList;
+    }
+
     public Tcontribuyente getTcontribuyente() {
         return tcontribuyente;
     }
 
     public void setTcontribuyente(Tcontribuyente tcontribuyente) {
         this.tcontribuyente = tcontribuyente;
+    }
+
+    @XmlTransient
+    public List<Tcabeceraretencion> getTcabeceraretencionList() {
+        return tcabeceraretencionList;
+    }
+
+    public void setTcabeceraretencionList(List<Tcabeceraretencion> tcabeceraretencionList) {
+        this.tcabeceraretencionList = tcabeceraretencionList;
+    }
+
+    public Tsesioncomprobante getTsesioncomprobante() {
+        return tsesioncomprobante;
+    }
+
+    public void setTsesioncomprobante(Tsesioncomprobante tsesioncomprobante) {
+        this.tsesioncomprobante = tsesioncomprobante;
     }
 
     @Override

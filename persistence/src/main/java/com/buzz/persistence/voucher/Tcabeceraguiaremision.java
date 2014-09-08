@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
@@ -30,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Entity
-@Table(name = "TCABECERAGUIAREMISION", catalog = "buzzSRI", schema = "")
+@Table(name = "TCABECERAGUIAREMISION")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcabeceraguiaremision.findAll", query = "SELECT t FROM Tcabeceraguiaremision t"),
@@ -87,13 +85,13 @@ public class Tcabeceraguiaremision implements Serializable {
     @Basic(optional = false)
     @Column(name = "placa", nullable = false, length = 20)
     private String placa;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccgremisionFk")
+    private List<Tdestinatarioguiaremision> tdestinatarioguiaremisionList;
     @JoinColumns({
         @JoinColumn(name = "ccontribuyente_fk2", referencedColumnName = "ccontribuyente_fk", nullable = false),
         @JoinColumn(name = "idpeticion_fk", referencedColumnName = "idpeticion", nullable = false)})
     @ManyToOne(optional = false)
     private Tcomprobante tcomprobante;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccgremisionFk")
-    private List<Tdestinatarioguiaremision> tdestinatarioguiaremisionList;
 
     public Tcabeceraguiaremision() {
     }
@@ -209,14 +207,6 @@ public class Tcabeceraguiaremision implements Serializable {
         this.placa = placa;
     }
 
-    public Tcomprobante getTcomprobante() {
-        return tcomprobante;
-    }
-
-    public void setTcomprobante(Tcomprobante tcomprobante) {
-        this.tcomprobante = tcomprobante;
-    }
-
     @XmlTransient
     public List<Tdestinatarioguiaremision> getTdestinatarioguiaremisionList() {
         return tdestinatarioguiaremisionList;
@@ -224,6 +214,14 @@ public class Tcabeceraguiaremision implements Serializable {
 
     public void setTdestinatarioguiaremisionList(List<Tdestinatarioguiaremision> tdestinatarioguiaremisionList) {
         this.tdestinatarioguiaremisionList = tdestinatarioguiaremisionList;
+    }
+
+    public Tcomprobante getTcomprobante() {
+        return tcomprobante;
+    }
+
+    public void setTcomprobante(Tcomprobante tcomprobante) {
+        this.tcomprobante = tcomprobante;
     }
 
     @Override
