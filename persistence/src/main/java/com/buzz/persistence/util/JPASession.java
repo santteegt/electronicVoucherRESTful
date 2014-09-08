@@ -97,7 +97,7 @@ public class JPASession {
 		
 		JPASession.beginTransaction();
 		Ttipocontribuyente ttipocontr = new Ttipocontribuyente(2);
-		ttipocontr.setDescripcion("TEST2");
+		ttipocontr.setDescripcion("TEST4");
 		EntityManager em = JPASession.getEntityManager();
 		ttipocontr = em.merge(ttipocontr);
 		//em.persist(ttipocontr);
