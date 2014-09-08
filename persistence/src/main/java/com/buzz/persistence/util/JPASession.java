@@ -1,7 +1,6 @@
 package com.buzz.persistence.util;
 
 
-import com.buzz.persistence.voucher.Tcontribuyente;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -13,10 +12,8 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import com.buzz.persistence.voucher.Ttipocontribuyente;
 import com.buzz.persistence.voucher.Tusuario;
-import com.buzz.persistence.voucher.Tusuarioid;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class JPASession {
@@ -98,58 +95,18 @@ public class JPASession {
 	
 	public static void main(String []args)throws Exception {
 		
-	JPASession.beginTransaction();
-		Ttipocontribuyente ttipocontr = new Ttipocontribuyente();
-		ttipocontr.setDescripcion("TEST2");
+		JPASession.beginTransaction();
+		Ttipocontribuyente ttipocontr = new Ttipocontribuyente(2);
+		ttipocontr.setDescripcion("TEST4");
 		EntityManager em = JPASession.getEntityManager();
-		//ttipocontr = em.merge(ttipocontr);
-		em.persist(ttipocontr);
-                JPASession.commitTransaction(false);
-                
-            JPASession.beginTransaction();
-            Tcontribuyente obj = new Tcontribuyente();
-            Ttipocontribuyente tipocon = new Ttipocontribuyente(1);
-            obj.setCtipocontribuyenteFk(tipocon);
-            obj.setFdesde(new Date());
-            obj.setFhasta(new Date());
-            obj.setIdentificacion("12345");
-            obj.setNombreComercial("nombre comercial de prueba");
-            obj.setRazonSocial("sjflkd");   
-            em = JPASession.getEntityManager();
-            em.persist(obj);
-            JPASession.commitTransaction(false);
-	    
-        
-            
-        JPASession.beginTransaction();
-            obj.setCcontribuyente(1);
-            Tusuarioid uid = new Tusuarioid();
-                uid.setCusuario("1");
-            uid.setCcontribuyenteFk(obj);
-            em = JPASession.getEntityManager();
-            em.persist(uid);
-            JPASession.commitTransaction(false);
-            JPASession.beginTransaction();
-            Tusuario usu = new Tusuario();
-            usu.setActivo(true);
-            usu.setContrasena("123456");
-            usu.setFdesde(new Date());
-            usu.setFhasta(new Date());
-            usu.setIdentificacion("0109837463");
-            usu.setTusuarioid(uid);
-            usu.setCusuarioFk("1");
-            em = JPASession.getEntityManager();
-            em.persist(usu);
-            JPASession.commitTransaction(false);
-                
-                
-                
-                List<Tusuario> list = JPASession.getResultSetQuery("from Tusuario a");
+		ttipocontr = em.merge(ttipocontr);
+		//em.persist(ttipocontr);
+		JPASession.commitTransaction(false);
+		List<Tusuario> list = JPASession.getResultSetQuery("from Tusuario a");
 		for(Tusuario entity: list){
 			System.out.println(entity.toString());
 		}
 		JPASession.commitTransaction(true);
-                
 	}
 
 }
