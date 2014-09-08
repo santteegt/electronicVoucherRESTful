@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
@@ -26,10 +24,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Entity
-@Table(name = "TDETALLENOTACREDITO", catalog = "buzzSRI", schema = "")
+@Table(name = "TDETALLENOTACREDITO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tdetallenotacredito.findAll", query = "SELECT t FROM Tdetallenotacredito t"),
@@ -68,13 +66,13 @@ public class Tdetallenotacredito implements Serializable {
     @Basic(optional = false)
     @Column(name = "precio_total_sin_impuesto", nullable = false)
     private float precioTotalSinImpuesto;
-    @JoinColumn(name = "ccnotacd_fk", referencedColumnName = "ccnotacd", nullable = false)
-    @ManyToOne(optional = false)
-    private Tcabeceranotacreditodebito ccnotacdFk;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cdncreditoFk")
     private List<Tdetalleadicionaldetallenotacredito> tdetalleadicionaldetallenotacreditoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cdncreditoFk")
     private List<Timpuestodetallenotacredito> timpuestodetallenotacreditoList;
+    @JoinColumn(name = "ccnotacd_fk", referencedColumnName = "ccnotacd", nullable = false)
+    @ManyToOne(optional = false)
+    private Tcabeceranotacreditodebito ccnotacdFk;
 
     public Tdetallenotacredito() {
     }
@@ -157,14 +155,6 @@ public class Tdetallenotacredito implements Serializable {
         this.precioTotalSinImpuesto = precioTotalSinImpuesto;
     }
 
-    public Tcabeceranotacreditodebito getCcnotacdFk() {
-        return ccnotacdFk;
-    }
-
-    public void setCcnotacdFk(Tcabeceranotacreditodebito ccnotacdFk) {
-        this.ccnotacdFk = ccnotacdFk;
-    }
-
     @XmlTransient
     public List<Tdetalleadicionaldetallenotacredito> getTdetalleadicionaldetallenotacreditoList() {
         return tdetalleadicionaldetallenotacreditoList;
@@ -181,6 +171,14 @@ public class Tdetallenotacredito implements Serializable {
 
     public void setTimpuestodetallenotacreditoList(List<Timpuestodetallenotacredito> timpuestodetallenotacreditoList) {
         this.timpuestodetallenotacreditoList = timpuestodetallenotacreditoList;
+    }
+
+    public Tcabeceranotacreditodebito getCcnotacdFk() {
+        return ccnotacdFk;
+    }
+
+    public void setCcnotacdFk(Tcabeceranotacreditodebito ccnotacdFk) {
+        this.ccnotacdFk = ccnotacdFk;
     }
 
     @Override

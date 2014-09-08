@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
@@ -13,7 +11,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Embeddable
 public class TcomprobantePK implements Serializable {
@@ -21,7 +19,7 @@ public class TcomprobantePK implements Serializable {
     @Column(name = "ccontribuyente_fk", nullable = false)
     private int ccontribuyenteFk;
     @Basic(optional = false)
-    @Column(nullable = false, length = 30)
+    @Column(name = "idpeticion", nullable = false, length = 30)
     private String idpeticion;
 
     public TcomprobantePK() {

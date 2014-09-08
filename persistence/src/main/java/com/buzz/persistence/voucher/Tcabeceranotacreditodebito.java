@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
@@ -30,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Entity
-@Table(name = "TCABECERANOTACREDITODEBITO", catalog = "buzzSRI", schema = "")
+@Table(name = "TCABECERANOTACREDITODEBITO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tcabeceranotacreditodebito.findAll", query = "SELECT t FROM Tcabeceranotacreditodebito t"),

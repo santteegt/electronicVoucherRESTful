@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.buzz.persistence.voucher;
 
 import java.io.Serializable;
@@ -14,21 +12,21 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author buzz
+ * @author karina
  */
 @Entity
-@Table(name = "TUSUARIOID", catalog = "buzzSRI", schema = "")
+@Table(name = "TUSUARIOID")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tusuarioid.findAll", query = "SELECT t FROM Tusuarioid t"),
@@ -39,16 +37,13 @@ public class Tusuarioid implements Serializable {
     @Basic(optional = false)
     @Column(name = "cusuario", nullable = false, length = 10)
     private String cusuario;
-    @JoinColumns({
-     @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false),
-     @JoinColumn(name = "fhasta", referencedColumnName = "fhasta", nullable = false)
-    })
-    @ManyToOne(optional = false)
-    private Tcontribuyente ccontribuyenteFk;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tusuarioid")
-    private List<Tusuario> tusuarioList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "tusuarioid")
+    private Tusuario tusuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusuarioFk")
     private List<Tusuariosesion> tusuariosesionList;
+    @JoinColumn(name = "ccontribuyente_fk", referencedColumnName = "ccontribuyente", nullable = false)
+    @ManyToOne(optional = false)
+    private Tcontribuyente ccontribuyenteFk;
 
     public Tusuarioid() {
     }
@@ -65,21 +60,12 @@ public class Tusuarioid implements Serializable {
         this.cusuario = cusuario;
     }
 
-    public Tcontribuyente getCcontribuyenteFk() {
-        return ccontribuyenteFk;
+    public Tusuario getTusuario() {
+        return tusuario;
     }
 
-    public void setCcontribuyenteFk(Tcontribuyente ccontribuyenteFk) {
-        this.ccontribuyenteFk = ccontribuyenteFk;
-    }
-
-    @XmlTransient
-    public List<Tusuario> getTusuarioList() {
-        return tusuarioList;
-    }
-
-    public void setTusuarioList(List<Tusuario> tusuarioList) {
-        this.tusuarioList = tusuarioList;
+    public void setTusuario(Tusuario tusuario) {
+        this.tusuario = tusuario;
     }
 
     @XmlTransient
@@ -89,6 +75,14 @@ public class Tusuarioid implements Serializable {
 
     public void setTusuariosesionList(List<Tusuariosesion> tusuariosesionList) {
         this.tusuariosesionList = tusuariosesionList;
+    }
+
+    public Tcontribuyente getCcontribuyenteFk() {
+        return ccontribuyenteFk;
+    }
+
+    public void setCcontribuyenteFk(Tcontribuyente ccontribuyenteFk) {
+        this.ccontribuyenteFk = ccontribuyenteFk;
     }
 
     @Override
