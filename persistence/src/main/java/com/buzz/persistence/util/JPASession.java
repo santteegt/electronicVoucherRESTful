@@ -6,30 +6,29 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 
 import com.buzz.persistence.voucher.Ttipocontribuyente;
 import com.buzz.persistence.voucher.Tusuario;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JPASession {
 	
-	private static ThreadLocal<EntityManagerFactory> threadFactory = new ThreadLocal<EntityManagerFactory>();
+	//private static ThreadLocal<EntityManagerFactory> threadFactory = new ThreadLocal<EntityManagerFactory>();
+	private static EntityManagerFactory factory;
 	
 	private static ThreadLocal<EntityManager> threadEntityManager = new ThreadLocal<EntityManager>();
 	
 	private static ThreadLocal<EntityTransaction> threadEntityTransaction = new ThreadLocal<EntityTransaction>();
 	
 	public static void getManager()throws Exception {
-		EntityManagerFactory factory = JPASession.threadFactory.get();
+		//EntityManagerFactory factory = JPASession.threadFactory.get();
 		EntityManager entityManager = JPASession.threadEntityManager.get();
-		if(factory == null) {
-			factory = Persistence.createEntityManagerFactory("persistence");
-			JPASession.threadFactory.set(factory);
+		if(JPASession.factory == null) {
+			JPASession.factory = Persistence.createEntityManagerFactory("persistence");
+			//JPASession.threadFactory.set(factory);
 			entityManager = factory.createEntityManager();
 			JPASession.threadEntityManager.set(entityManager);
 		}
@@ -37,8 +36,9 @@ public class JPASession {
 	
 	public static void beginTransaction()throws Exception {
 		JPASession.getManager();
-		if(JPASession.threadEntityTransaction.get() == null ||
-				!JPASession.threadEntityTransaction.get().isActive()) {
+		if(JPASession.threadEntityManager.get() == null ||
+				!JPASession.threadEntityManager.get().isOpen()) {
+			JPASession.threadEntityManager.set(JPASession.factory.createEntityManager());
 			EntityTransaction transaction = JPASession.threadEntityManager.get().getTransaction();
 			JPASession.threadEntityTransaction.set(transaction);
 			transaction.begin();
@@ -66,31 +66,63 @@ public class JPASession {
 	}
 	
 	public static void closeManager()throws Exception {
-		if(JPASession.threadFactory.get() != null) {
+		//if(JPASession.threadFactory.get() != null) {
+		if(JPASession.threadEntityManager.get() != null) {
 			JPASession.threadEntityManager.get().close();
-			JPASession.threadFactory.get().close();
+			JPASession.threadEntityManager.set(null);
+			//JPASession.threadFactory.get().close();
 		}
 	}
 	
-	public static <T> List<T> getResultSetQuery(String queryString)throws Exception {
+	public static <T> List<T> getResultSetQuery(String queryString, Map<String,Object>... params)throws Exception {
+		Map<String,Object> parameters = params != null?params[0]:new HashMap<String, Object>();
 		List <T> resultList = null;
 		try {
-			if(JPASession.threadFactory.get() != null) {
-				EntityManager entityManager = JPASession.threadEntityManager.get();
-				//TypedQuery<Tusuario> queryL = entityManager.createQuery("from Tusuario a", Tusuario.class);
+			if(JPASession.getEntityManager() != null) {
+				EntityManager entityManager = JPASession.getEntityManager();
 				Query queryl= entityManager.createQuery(queryString);
+				setParameters(queryl, parameters);
 				resultList = queryl.getResultList();
-				
-				
+
+			} else {
+				throw new NullPointerException("Transacción no inicializada");
 			}
 		}catch(Exception e) {
-			JPASession.threadEntityTransaction.get().rollback();
-			JPASession.closeManager();
+			//JPASession.threadEntityTransaction.get().rollback();
+			//JPASession.closeManager();
 			throw e;
 		}
 		return resultList;
 	}
 	
+	public static Object getQueryBean(String queryString, Map<String,Object>... params)throws Exception {
+		Map<String,Object> parameters = params != null?params[0]:new HashMap<String, Object>();
+		Object bean = null;
+		if(JPASession.getEntityManager() != null) {
+			EntityManager entityManager = JPASession.getEntityManager();
+			Query queryl= entityManager.createQuery(queryString);
+			setParameters(queryl, parameters);
+			bean = queryl.getSingleResult();
+
+		} else {
+			throw new NullPointerException("Transacción no inicializada");
+		}
+		return bean;
+	}
+	
+	private static void setParameters(Query pQuery, Map<String,Object> params)throws Exception {
+		for(String paramName:params.keySet()) {
+			pQuery.setParameter(paramName, params.get(paramName));
+		}
+	}
+	
+	public static void saveOrUpdate(Object pBean)throws Exception{
+		EntityManager em = JPASession.getEntityManager();
+		if(em == null) {
+			throw new NullPointerException("Transacción no inicializada");
+		}
+		em.merge(pBean);
+	}
 	
 	
 	public static void main(String []args)throws Exception {
@@ -98,11 +130,14 @@ public class JPASession {
 		JPASession.beginTransaction();
 		Ttipocontribuyente ttipocontr = new Ttipocontribuyente(2);
 		ttipocontr.setDescripcion("TEST2");
-		EntityManager em = JPASession.getEntityManager();
-		ttipocontr = em.merge(ttipocontr);
+		JPASession.saveOrUpdate(ttipocontr);
 		//em.persist(ttipocontr);
 		JPASession.commitTransaction(false);
-		List<Tusuario> list = JPASession.getResultSetQuery("from Tusuario a");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("user", "ADMIN");
+		/*Tusuarioid user = (Tusuarioid)JPASession.getQueryBean("from Tusuarioid a where cusuario=:user", params);
+		System.out.println(user.toString());*/
+		List<Tusuario> list = JPASession.getResultSetQuery("from Tusuario a"); 
 		for(Tusuario entity: list){
 			System.out.println(entity.toString());
 		}

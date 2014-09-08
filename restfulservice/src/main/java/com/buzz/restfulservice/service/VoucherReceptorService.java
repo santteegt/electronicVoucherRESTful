@@ -27,7 +27,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 
@@ -37,6 +39,8 @@ import com.buzz.electronicvoucher.schema.v1_1_0.Factura;
 import com.buzz.electronicvoucher.schema.v1_1_0.InfoTributaria;
 import com.buzz.electronicvoucher.schema.v1_1_0.Factura.Retenciones.Retencion;
 import com.buzz.electronicvoucher.util.Modulo11;
+import com.buzz.persistence.util.JPAServerSession;
+import com.buzz.persistence.util.JPASession;
 import com.buzz.restfulservice.model.User;
 import com.buzz.restfulservice.model.Users;
 import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
@@ -98,9 +102,33 @@ public class VoucherReceptorService
     @Produces("application/json")
     public Response processBilling(Factura pFactura)
     {
-    	log.info("************ENTRA AL METODO POST BILL");
-    	ElectronicVoucherSender sender = new ElectronicVoucherSender();
-    	JSONObject response = sender.processVoucher(pFactura);
+    	JSONObject response = new JSONObject();
+    	try{
+	    	log.info("************ENTRA AL METODO POST BILL");
+	    	//JPAServerSession.beginTransaction();
+	    	JPASession.beginTransaction();
+	    	ElectronicVoucherSender sender = new ElectronicVoucherSender();
+	    	response = sender.processVoucher(pFactura);
+    	}catch(Exception e) {
+    		log.info(e);
+    		log.error(e);
+    		try{
+	    		response.append("estado", "Internal Error");
+	    		response.append("fullMessage", e.getMessage());
+	    		response.append("stacktrace", ExceptionUtils.getStackTrace(e));
+    		}catch(JSONException ejson) {
+    			log.info(e.getMessage());
+    		}
+    		
+    	}
+    	finally{
+    		try{
+    			//JPAServerSession.commitTransaction(true);
+    			JPASession.commitTransaction(true);
+    		}catch(Exception e) {
+    			log.info(e.getMessage());
+    		}
+    	}
         return Response.status(200).entity(response.toString()).build();
         
     	/*Object obj = null;
@@ -120,10 +148,35 @@ public class VoucherReceptorService
     @Produces("application/json")
     public Response processRetention(ComprobanteRetencion pRetention)
     {
-    	log.info("************ENTRA AL METODO POST RETENTION");
-    	ElectronicVoucherSender sender = new ElectronicVoucherSender();
-    	JSONObject response = sender.processVoucher(pRetention);
+    	JSONObject response = new JSONObject();
+    	try{
+    		log.info("************ENTRA AL METODO POST RETENTION");
+	    	//JPAServerSession.beginTransaction();
+	    	JPASession.beginTransaction();
+	    	ElectronicVoucherSender sender = new ElectronicVoucherSender();
+	    	response = sender.processVoucher(pRetention);
+    	}catch(Exception e) {
+    		log.info(e);
+    		log.error(e);
+    		try{
+	    		response.append("estado", "Internal Error");
+	    		response.append("fullMessage", e.getMessage());
+	    		response.append("stacktrace", ExceptionUtils.getStackTrace(e));
+    		}catch(JSONException ejson) {
+    			log.info(e.getMessage());
+    		}
+    		
+    	}
+    	finally{
+    		try{
+    			//JPAServerSession.commitTransaction(true);
+    			JPASession.commitTransaction(true);
+    		}catch(Exception e) {
+    			log.info(e.getMessage());
+    		}
+    	}
         return Response.status(200).entity(response.toString()).build();
+
     }
     
     @POST

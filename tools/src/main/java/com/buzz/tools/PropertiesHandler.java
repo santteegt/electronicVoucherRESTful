@@ -1,4 +1,4 @@
-package com.buzz.electronicvoucher.util;
+package com.buzz.tools;
 
 import java.io.File;
 
@@ -25,16 +25,19 @@ public class PropertiesHandler {
     protected final FileChangedReloadingStrategy reloadingStrategy =
     		new FileChangedReloadingStrategy();
     
-    public static Configuration getInstance(String name) {
+    public static Configuration getInstance(String name)throws Exception {
     	if(instance == null || !propertyName.equals(name)) {
     		instance = new PropertiesHandler(name);
     	}
     	return instance.getConf();
     }
     
-    private PropertiesHandler(String name) {
+    private PropertiesHandler(String name)throws Exception {
     	
     	String propertyFileDir = System.getProperty(FOLDER_PROPERTY);
+    	if(propertyFileDir == null){
+    		new NullPointerException("System Property not found " + FOLDER_PROPERTY);
+    	}
     	log.info("Directorio properties: => " + propertyFileDir);
     	File file = new File(propertyFileDir, name + EXTENSION);
     	
