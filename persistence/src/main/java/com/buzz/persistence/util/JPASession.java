@@ -29,12 +29,12 @@ public class JPASession {
 		if(JPASession.factory == null) {
 			JPASession.factory = Persistence.createEntityManagerFactory("persistence");
 			//JPASession.threadFactory.set(factory);
-			entityManager = factory.createEntityManager();
-			JPASession.threadEntityManager.set(entityManager);
+			//entityManager = factory.createEntityManager();
+			//JPASession.threadEntityManager.set(entityManager);
 		}
 	}
 	
-	public static void beginTransaction()throws Exception {
+	public synchronized static void beginTransaction()throws Exception {
 		JPASession.getManager();
 		if(JPASession.threadEntityManager.get() == null ||
 				!JPASession.threadEntityManager.get().isOpen()) {
@@ -62,6 +62,15 @@ public class JPASession {
 		if(closeManager) {
 			JPASession.closeManager();
 		}
+		
+	}
+	
+	public static void rollbackTransaction()throws Exception {
+		EntityTransaction transaction = JPASession.threadEntityTransaction.get();
+		if(transaction.isActive()) {
+			transaction.rollback();
+		}
+		JPASession.closeManager();
 		
 	}
 	
@@ -121,7 +130,8 @@ public class JPASession {
 		if(em == null) {
 			throw new NullPointerException("Transacción no inicializada");
 		}
-		em.merge(pBean);
+		//em.merge(pBean);
+		em.persist(pBean);
 	}
 	
 	

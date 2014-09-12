@@ -28,6 +28,7 @@ public class ReportManager extends Thread
 {
   private InputStream reportData;
   private ByteArrayOutputStream output;
+  private String outName;
   private String type;
   private Map<String, Object> parameterValues;
   private final Map<String, Object> sessionParameterValues = new HashMap();
@@ -36,11 +37,12 @@ public class ReportManager extends Thread
   private Configuration properties;
 
 
-  public ReportManager(String reportName, ConcurrentHashMap<String, Object> parameters, String type)throws Exception{
+  public ReportManager(String reportName, ConcurrentHashMap<String, Object> parameters, String outName)throws Exception{
 	  this.properties = PropertiesHandler.getInstance("buzzsri");
 	  this.reportName = reportName;
 	  this.parameters = parameters;
-	  this.type = type;
+	  this.outName = outName;
+	  this.type = "PDF";
 	  parameters.put("SUBREPORT_DIR", properties.getString("report.dir"));
   }
   
@@ -73,9 +75,13 @@ public class ReportManager extends Thread
     	    //this.parameterValues = pParameters;
     	    evalReport();
     	    JSONObject json = new JSONObject();
-    	    FileOutputStream out = new FileOutputStream(new File(properties.getString("report.dir.out") + reportName + System.currentTimeMillis() +".pdf"));
-    	    out.write(output.toByteArray());
-    	    out.close();
+    	    if(this.outName != null) {
+	    	    FileOutputStream out = new FileOutputStream(
+	    	    		new File(properties.getString("report.dir.out") 
+	    	    				+ this.outName + "." + this.type.toLowerCase()));
+	    	    out.write(output.toByteArray());
+	    	    out.close();
+    	    }
     	    json.append("generatedReport", Base64.encode(output.toByteArray()).toString());
     	    json.append("content-type", getContentType());
 	      

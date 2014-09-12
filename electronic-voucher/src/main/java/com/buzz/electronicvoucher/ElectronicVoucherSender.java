@@ -49,11 +49,14 @@ import com.buzz.persistence.util.JPASession;
 import com.buzz.persistence.voucher.Tusuario;
 import com.buzz.persistence.voucher.Tusuarioid;
 import com.buzz.tools.ReportManager;
+import com.buzz.tools.TokenCreator;
 
 public class ElectronicVoucherSender {
 	
 	private ElectronicVoucherTypes voucherType;
 	private DataFiller dataFiller;
+	private String sessionToken = TokenCreator.createToken();
+	private String signedVoucher;
 	private Object objeto;
 	private String nombre;
 	private Logger log = Logger.getLogger(ElectronicVoucherSender.class);
@@ -159,15 +162,19 @@ public class ElectronicVoucherSender {
 			Boolean isAuthorized = this.readDocumentReturnSri(printedSoapResponse, voucherDocument, jsonResponse);
 			jsonResponse.append("fullMessage2", printedSoapResponse);
 			
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("status", ElectronicVoucherStatusTypes.AUTHORIZED.getStatus());
+			parameters.put("jsonResponse", jsonResponse);
+			parameters.put("sessionToken", this.sessionToken);
+			parameters.put("signedVoucher", this.signedVoucher);
+			
+			VoucherDataFiller processedVoucher = new VoucherDataFiller();
+			processedVoucher.setParameters(parameters,
+					processedVoucher.getReportName());
+			processedVoucher.fillData(ccontribuyente, pObject);
+			
 			if(isAuthorized) {
-				//new VoucherDataFiller().fillData(ccontribuyente, pObject);
-				if(this.voucherType.equals(ElectronicVoucherTypes.BILL)) {
-					
-				}
-				if(this.voucherType.equals(ElectronicVoucherTypes.RETENTION)) {
-					
-				}
-					
+				//this.dataFiller.fillData(pk, voucher);		
 			}
     	return jsonResponse;
     }
@@ -255,7 +262,7 @@ public class ElectronicVoucherSender {
 						.getElementsByTagName("numeroAutorizacion").item(0)
 						.getChildNodes().item(0).getNodeValue();
 				
-				String signedXMLFile =  authorization
+				this.signedVoucher =  authorization
 						.getElementsByTagName("comprobante").item(0)
 						.getChildNodes().item(0).getNodeValue();
 				
@@ -391,7 +398,7 @@ public class ElectronicVoucherSender {
 		String reportName = this.dataFiller.fillReportData(document, reportParameters);
 
 		reportParameters.put("XML_DATA_DOCUMENT", document);
-		return new ReportManager(reportName, reportParameters, "PDF").executeReport();
+		return new ReportManager(reportName, reportParameters, authorizationNumber).executeReport();
 		
 	}
 
