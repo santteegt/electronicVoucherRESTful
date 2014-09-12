@@ -6,8 +6,12 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.print.attribute.HashAttributeSet;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -33,16 +37,23 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.buzz.electronicvoucher.data.DataFiller;
+import com.buzz.electronicvoucher.data.VoucherDataFiller;
 import com.buzz.electronicvoucher.schema.v1_0_0.ComprobanteRetencion;
 import com.buzz.electronicvoucher.schema.v1_1_0.Factura;
 import com.buzz.electronicvoucher.schema.v1_1_0.InfoTributaria;
 import com.buzz.electronicvoucher.util.Modulo11;
 import com.buzz.electronicvoucher.util.SOAPClient;
 import com.buzz.electronicvoucher.util.SignatureUtil;
+import com.buzz.persistence.util.JPASession;
+import com.buzz.persistence.voucher.Tusuario;
+import com.buzz.persistence.voucher.Tusuarioid;
 import com.buzz.tools.ReportManager;
 
 public class ElectronicVoucherSender {
 	
+	private ElectronicVoucherTypes voucherType;
+	private DataFiller dataFiller;
 	private Object objeto;
 	private String nombre;
 	private Logger log = Logger.getLogger(ElectronicVoucherSender.class);
@@ -53,7 +64,13 @@ public class ElectronicVoucherSender {
      * @param pObject
      * @return
      */
-    public JSONObject processVoucher(Object pObject) {
+    public JSONObject processVoucher(Object pObject)throws Exception {
+    	String username = "ADMIN";
+    	/*Map<String, Object> params = new HashMap<String, Object>();
+    	params.put("user", username);
+    	Tusuarioid tusuarioid = (Tusuarioid)JPASession.getQueryBean("from Tusuarioid a where cusuario =:user", params);
+    	*/
+    	Integer ccontribuyente = 1;
     	
     	System.setProperty("javax.net.ssl.trustStore",
 				"/Users/santteegt/Desktop/sri/jks/keystore.jks");
@@ -70,7 +87,7 @@ public class ElectronicVoucherSender {
 		
     	JSONObject jsonResponse = new JSONObject();
     	//StringWriter voucherWriter = new StringWriter();
-    	try{
+    	//try{
 	    	
 	    	DocumentBuilderFactory factory =
 	    		      DocumentBuilderFactory.newInstance();
@@ -90,7 +107,7 @@ public class ElectronicVoucherSender {
 	    	log.info("PROCESSING ACCESSKEY: "+ accessKey);
 	    	
 	    	if(pObject instanceof Factura) {
-		    	
+	    		this.voucherType = ElectronicVoucherTypes.BILL;
 	    		Schema schema = schemaFactory.newSchema(
 	    				Thread.currentThread().getContextClassLoader()
 	    				.getResource("factura.xsd"));
@@ -105,6 +122,7 @@ public class ElectronicVoucherSender {
 		        //marshaller.marshal(pObject, voucherDocument);
 	    	}
 	    	if (pObject instanceof ComprobanteRetencion){
+	    		this.voucherType = ElectronicVoucherTypes.RETENTION;
 	    		Schema schema = schemaFactory.newSchema(
 	    				Thread.currentThread().getContextClassLoader()
 	    				.getResource("comprobanteRetencion1.xsd"));
@@ -112,6 +130,8 @@ public class ElectronicVoucherSender {
 	    		
 	    	}
 	    	marshaller.marshal(pObject, voucherDocument);
+	    	
+	    	this.dataFiller = (DataFiller)Class.forName(this.voucherType.getdataFillerClass()).newInstance();
 	    	
 	    	SignatureUtil sgp = new SignatureUtil("PKCS12", pathFileJks,
 					jksPasswordStore, jksPassPrivate);
@@ -136,24 +156,19 @@ public class ElectronicVoucherSender {
 			String printedSoapResponse = SOAPClient.getInstance().soapSendReal(
 					endpointR, sopRes);
 			
-			this.readDocumentReturnSri(printedSoapResponse, voucherDocument, jsonResponse);
+			Boolean isAuthorized = this.readDocumentReturnSri(printedSoapResponse, voucherDocument, jsonResponse);
 			jsonResponse.append("fullMessage2", printedSoapResponse);
 			
-    	}catch(Exception e){
-    		
-    		log.info(e);
-    		log.error(e);
-    		try{
-	    		jsonResponse = new JSONObject();
-	    		jsonResponse.append("estado", "Internal Error");
-	    		jsonResponse.append("fullMessage", e.getMessage());
-	    		jsonResponse.append("stacktrace", ExceptionUtils.getStackTrace(e));
-    		}catch(JSONException ejson) {
-    			log.info(e.getMessage());
-    		}
-    	}finally{
-    		
-    	}
+			if(isAuthorized) {
+				//new VoucherDataFiller().fillData(ccontribuyente, pObject);
+				if(this.voucherType.equals(ElectronicVoucherTypes.BILL)) {
+					
+				}
+				if(this.voucherType.equals(ElectronicVoucherTypes.RETENTION)) {
+					
+				}
+					
+			}
     	return jsonResponse;
     }
     
@@ -168,23 +183,10 @@ public class ElectronicVoucherSender {
     		String accessKey = voucherNode.getElementsByTagName("claveAcceso").item(0).getChildNodes().item(0).getNodeValue();
     		voucher.append("claveAcceso", accessKey);
     		NodeList errorMessages = voucherNode.getElementsByTagName("mensajes").item(0).getChildNodes();
-    		/*JSONArray errorArray = new JSONArray();
-    		for(int j=0;j< errorMessages.getLength() ; j++) {
-    			JSONObject error = new JSONObject();
-    			Element errorNode = (Element)errorMessages.item(j);
-    			error.append("identificador",
-    					errorNode.getElementsByTagName("identificador").item(0).getChildNodes().item(0).getNodeValue());
-    			error.append("tipo",
-    					errorNode.getElementsByTagName("tipo").item(0).getChildNodes().item(0).getNodeValue());
-    			error.append("mensaje",
-    					errorNode.getElementsByTagName("mensaje").item(0).getChildNodes().item(0).getNodeValue());
-    			error.append("informacionAdicional",
-    					errorNode.getElementsByTagName("informacionAdicional").item(0).getChildNodes().item(0).getNodeValue());
-    			errorArray.put(error);
-    		}
-    		voucher.append("mensajes", errorArray);*/
+
     		JSONArray errorArray = this.getResponseErrorMessages(errorMessages);
-			if(errorArray.length() > 0)
+
+    		if(errorArray.length() > 0)
 				voucher.append("mensajes", errorArray);
     		voucherArray.put(voucher);
     	}
@@ -218,8 +220,9 @@ public class ElectronicVoucherSender {
 		return documento;
 	}
 
-	public void readDocumentReturnSri(String xml, Document voucherDocument, JSONObject jsonResponse)
+	public Boolean readDocumentReturnSri(String xml, Document voucherDocument, JSONObject jsonResponse)
 			throws Exception {
+		Boolean result = false;
 		Document documento = this.readXMLDocumentEnveloped(xml);
 		
 		NodeList nodeList = documento.getElementsByTagName("autorizacion");
@@ -247,7 +250,7 @@ public class ElectronicVoucherSender {
 			
 			if (ElectronicVoucherStatusTypes.AUTHORIZED
 					.getStatus().equals(authorizationStatus)) {
-				
+				result = true;
 				String authorizationNumber = authorization
 						.getElementsByTagName("numeroAutorizacion").item(0)
 						.getChildNodes().item(0).getNodeValue();
@@ -257,9 +260,9 @@ public class ElectronicVoucherSender {
 						.getChildNodes().item(0).getNodeValue();
 				
 				headResponse.append("numeroAutorizacion", authorizationNumber);
-								
-				jsonResponse.append("voucherReport", 
-						this.readDocumentXML(voucherDocument) );
+				
+				this.readDocumentXML(voucherDocument, authorizationNumber, authorizationDate);
+				jsonResponse.append("voucherReport", "");
 			}
 			if(ElectronicVoucherStatusTypes.NONAUTHORIZED
 					.getStatus().equals(authorizationStatus)) {
@@ -272,6 +275,7 @@ public class ElectronicVoucherSender {
 			}
 			jsonResponse.append("SRIresponse", headResponse);
 		}
+		return result;
 	}
 	
 	private JSONArray getResponseErrorMessages(NodeList errorMessages)throws Exception {
@@ -294,8 +298,8 @@ public class ElectronicVoucherSender {
 		return errorArray;
 	}
 
-	public JSONObject readDocumentXML(Document document)
-			throws Exception {
+	public JSONObject readDocumentXML(Document document, String authorizationNumber,
+			String authorizationDate)throws Exception {
 		ConcurrentHashMap<String, Object> reportParameters = new ConcurrentHashMap<String, Object>();
 	      
 		
@@ -314,12 +318,10 @@ public class ElectronicVoucherSender {
 		documento.getDocumentElement().normalize();*/
 		NodeList nodeinfoTributaria = document
 				.getElementsByTagName("infoTributaria");
-		NodeList nodeinfoFactura = document
-				.getElementsByTagName("infoFactura");
-		NodeList nodetotalImpuesto = document
-				.getElementsByTagName("totalImpuesto");
+		
 		for (int s = 0; s < nodeinfoTributaria.getLength(); s++) {
 			Node primerNodo = nodeinfoTributaria.item(s);
+			String ambiente;
 			String ruc;
 			String claveAcceso;
 			String razonSocial;
@@ -329,147 +331,67 @@ public class ElectronicVoucherSender {
 			String estab;
 			String ptoEmi;
 			String secuencial;
-			String ivas = "0";
-			//if (primerNodo.getNodeType() == Node.ELEMENT_NODE) {
-				Element primerElemento = (Element) primerNodo;
-				ruc = primerElemento
-						.getElementsByTagName("ruc").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				claveAcceso = primerElemento
-						.getElementsByTagName("claveAcceso").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				razonSocial = primerElemento
-						.getElementsByTagName("razonSocial").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				dirMatriz = primerElemento
-						.getElementsByTagName("dirMatriz").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				tipoEmision = primerElemento
-						.getElementsByTagName("tipoEmision").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				nombreComercial = primerElemento
-						.getElementsByTagName("nombreComercial").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				estab = primerElemento
-						.getElementsByTagName("estab").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				ptoEmi = primerElemento
-						.getElementsByTagName("ptoEmi").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				secuencial = primerElemento
-						.getElementsByTagName("secuencial").item(0)
-						.getChildNodes().item(0).getNodeValue();
-				
-				reportParameters.put("RUC", ruc);
-				reportParameters.put("CLAVE_ACC", claveAcceso);
-				reportParameters.put("RAZON_SOCIAL", razonSocial);
-				reportParameters.put("NUM_FACT", 
-						estab + "-" + ptoEmi + "-" + secuencial);
-				reportParameters.put("DIR_MATRIZ", dirMatriz);
-				reportParameters.put("DIR_SUCURSAL", dirMatriz);
-				reportParameters.put("NOM_COMERCIAL", 
-						nombreComercial);
-				reportParameters.put("TIPO_EMISION", tipoEmision);
-				reportParameters.put("IVA_0", ivas);
-				reportParameters.put("IVA_12", ivas);
-				reportParameters.put("NO_OBJETO_IVA", ivas);
-			//}
-		}
-		for (int s = 0; s < nodeinfoFactura.getLength(); s++) {
-			Node primerNodo = nodeinfoFactura.item(s);
-			String fechaEmision;
-			String contribuyenteEspecial;
-			String obligadoContabilidad;
-			String razonSocialComprador;
-			String identificacionComprador;
-			String propina;
-			String importeTotal;
-			String totalSinImpuestos;
-			String totalDescuento;
-			//if (primerNodo.getNodeType() == Node.ELEMENT_NODE) {
-				Element primerElemento = (Element) primerNodo;
-				fechaEmision = primerElemento
-						.getElementsByTagName("fechaEmision").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				contribuyenteEspecial = primerElemento
-						.getElementsByTagName("contribuyenteEspecial").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				obligadoContabilidad = primerElemento
-						.getElementsByTagName("obligadoContabilidad").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				razonSocialComprador = primerElemento
-						.getElementsByTagName("razonSocialComprador").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				identificacionComprador = primerElemento
-						.getElementsByTagName("identificacionComprador").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				propina = primerElemento
-						.getElementsByTagName("propina").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				importeTotal = primerElemento
-						.getElementsByTagName("importeTotal").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				totalSinImpuestos = primerElemento
-						.getElementsByTagName("totalSinImpuestos").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				totalDescuento = primerElemento
-						.getElementsByTagName("totalDescuento").item(0)
-						.getChildNodes().item(0).getNodeValue();
-
-				
-				reportParameters.put("FECHA_EMISION", fechaEmision);
-				reportParameters.put("CONT_ESPECIAL", 
-						contribuyenteEspecial);
-				reportParameters.put("LLEVA_CONTABILIDAD", 
-						obligadoContabilidad);
-				reportParameters.put("RS_COMPRADOR", 
-						razonSocialComprador);
-				reportParameters.put("RUC_COMPRADOR", 
-						identificacionComprador);
-				reportParameters.put("PROPINA", propina);
-				reportParameters.put("SUBTOTAL", totalSinImpuestos);
-				reportParameters.put("TOTAL_DESCUENTO", 
-						totalDescuento);
-				reportParameters.put("VALOR_TOTAL", importeTotal);
-			//}
-		}
-		for (int s = 0; s < nodetotalImpuesto.getLength(); s++) {
-			Node primerNodo = nodetotalImpuesto.item(s);
-			String codigo;
-			String valor;
+			
 			Element primerElemento = (Element) primerNodo;
-			codigo = primerElemento
-					.getElementsByTagName("codigo").item(0)
+			ambiente = primerElemento
+					.getElementsByTagName("ambiente").item(0)
+					.getChildNodes().item(0).getNodeValue();
+			
+			ruc = primerElemento
+					.getElementsByTagName("ruc").item(0)
 					.getChildNodes().item(0).getNodeValue();
 
-			valor = primerElemento
-					.getElementsByTagName("valor").item(0)
+			claveAcceso = primerElemento
+					.getElementsByTagName("claveAcceso").item(0)
 					.getChildNodes().item(0).getNodeValue();
 
-			if ("3".equals(codigo)) {
-				reportParameters.put("ICE", valor);
-			} else {
-				reportParameters.put("IVA", valor);
-			}
+			razonSocial = primerElemento
+					.getElementsByTagName("razonSocial").item(0)
+					.getChildNodes().item(0).getNodeValue();
+
+			dirMatriz = primerElemento
+					.getElementsByTagName("dirMatriz").item(0)
+					.getChildNodes().item(0).getNodeValue();
+
+			tipoEmision = primerElemento
+					.getElementsByTagName("tipoEmision").item(0)
+					.getChildNodes().item(0).getNodeValue();
+
+			nombreComercial = primerElemento
+					.getElementsByTagName("nombreComercial").item(0)
+					.getChildNodes().item(0).getNodeValue();
+
+			estab = primerElemento
+					.getElementsByTagName("estab").item(0)
+					.getChildNodes().item(0).getNodeValue();
+
+			ptoEmi = primerElemento
+					.getElementsByTagName("ptoEmi").item(0)
+					.getChildNodes().item(0).getNodeValue();
+
+			secuencial = primerElemento
+					.getElementsByTagName("secuencial").item(0)
+					.getChildNodes().item(0).getNodeValue();
+			
+			reportParameters.put("AMBIENTE", ambiente);
+			reportParameters.put("RUC", ruc);
+			reportParameters.put("CLAVE_ACC", claveAcceso);
+			reportParameters.put("RAZON_SOCIAL", razonSocial);
+			reportParameters.put("NUM_FACT", 
+					estab + "-" + ptoEmi + "-" + secuencial);
+			reportParameters.put("DIR_MATRIZ", dirMatriz);
+			reportParameters.put("DIR_SUCURSAL", dirMatriz);
+			reportParameters.put("NOM_COMERCIAL", 
+					nombreComercial);
+			reportParameters.put("TIPO_EMISION", tipoEmision);
+			reportParameters.put("NUM_AUT", authorizationNumber);
+			reportParameters.put("FECHA_AUT", authorizationDate);
+			
 		}
+		String reportName = this.dataFiller.fillReportData(document, reportParameters);
+
 		reportParameters.put("XML_DATA_DOCUMENT", document);
-		return new ReportManager("", reportParameters, "PDF").executeReport();
+		return new ReportManager(reportName, reportParameters, "PDF").executeReport();
 		
 	}
 

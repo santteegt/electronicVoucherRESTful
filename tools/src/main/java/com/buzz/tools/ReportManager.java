@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
+import org.apache.commons.configuration.Configuration;
 import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONObject;
 
@@ -32,13 +33,15 @@ public class ReportManager extends Thread
   private final Map<String, Object> sessionParameterValues = new HashMap();
   private ConcurrentHashMap<String, Object> parameters;
   private String reportName;
+  private Configuration properties;
 
 
-  public ReportManager(String reportName, ConcurrentHashMap<String, Object> parameters, String type) {
+  public ReportManager(String reportName, ConcurrentHashMap<String, Object> parameters, String type)throws Exception{
+	  this.properties = PropertiesHandler.getInstance("buzzsri");
 	  this.reportName = reportName;
 	  this.parameters = parameters;
 	  this.type = type;
-	  parameters.put("SUBREPORT_DIR", "/Users/santteegt/Desktop/BUZZSRI/reportes/");
+	  parameters.put("SUBREPORT_DIR", properties.getString("report.dir"));
   }
   
   public JSONObject executeReport() throws Exception {
@@ -49,7 +52,7 @@ public class ReportManager extends Thread
           //reportFile = this.getFile(vReadDatabase, reportName);
     	  //Configuration configFitReports = PropertiesHandler.getConfig("fitreports");
           //String path = configFitReports.getString("report.receipt.path") + reportName + ".jasper";
-          File file = new File("/Users/santteegt/Desktop/BUZZSRI/reportes/24_FACTURAELECTRONICA.jasper");
+          File file = new File(properties.getString("report.dir") + reportName + ".jasper");
           //FileInputStream in = new FileInputStream(file);
           this.reportData = new FileInputStream(file);
           /*byte b[] = new byte[9999];
@@ -70,7 +73,7 @@ public class ReportManager extends Thread
     	    //this.parameterValues = pParameters;
     	    evalReport();
     	    JSONObject json = new JSONObject();
-    	    FileOutputStream out = new FileOutputStream(new File("/Users/santteegt/Desktop/BUZZSRI/reportes/generado.pdf"));
+    	    FileOutputStream out = new FileOutputStream(new File(properties.getString("report.dir.out") + reportName + System.currentTimeMillis() +".pdf"));
     	    out.write(output.toByteArray());
     	    out.close();
     	    json.append("generatedReport", Base64.encode(output.toByteArray()).toString());

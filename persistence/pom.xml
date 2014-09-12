@@ -36,6 +36,8 @@
     	<groupId>org.hibernate</groupId>
     	<artifactId>hibernate-core</artifactId>
     	<version>4.3.6.Final</version>
+    	<!-- <version>4.2.0.Final</version>
+    	<scope>provided</scope> -->
 	</dependency>
 	
 	<!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
@@ -43,12 +45,24 @@
 	    <groupId>org.hibernate</groupId>
 	    <artifactId>hibernate-entitymanager</artifactId>
 	    <version>4.3.6.Final</version>
+	    <!-- <version>4.2.0.Final</version>
+    	<scope>provided</scope> -->
 	</dependency>
 	
 	<dependency>
-	<groupId>mysql</groupId>
-	<artifactId>mysql-connector-java</artifactId>
-	<version>5.1.31</version>
-</dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>5.1.31</version>
+	</dependency>
+    <dependency>
+	   	<groupId>commons-lang</groupId>
+	   	<artifactId>commons-lang</artifactId>
+	   	<version>2.4</version>
+    </dependency>
+    <dependency>
+   		<groupId>log4j</groupId>
+  	 	<artifactId>log4j</artifactId>
+   		<version>1.2.17</version>
+	</dependency>
   </dependencies>
 </project>
