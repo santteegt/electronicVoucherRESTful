@@ -7,10 +7,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class RetentionDataFiller implements DataFiller {
+public class RetentionDataFiller extends DataFiller {
 	
-	private String reportName="comprobanteRetencion";
-
+	private String reportName = "comprobanteRetencion";
+	
+	@Override
+	public String getReportName(){
+		return this.reportName;
+	}
+	
 	public void fillData(Object pk, Object voucher) throws Exception {
 		// TODO Auto-generated method stub
 		

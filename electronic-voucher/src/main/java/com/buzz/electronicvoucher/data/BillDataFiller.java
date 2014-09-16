@@ -7,9 +7,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class BillDataFiller implements DataFiller {
+public class BillDataFiller extends DataFiller {
+
+	private String reportName = "factura";
 	
-	private String reportName="factura";
+	@Override
+	public String getReportName(){
+		return this.reportName;
+	}
 
 	public void fillData(Object pk, Object voucher) throws Exception {
 		// TODO Auto-generated method stub

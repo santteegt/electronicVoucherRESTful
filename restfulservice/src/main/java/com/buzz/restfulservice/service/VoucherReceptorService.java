@@ -27,6 +27,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -43,6 +44,7 @@ import com.buzz.persistence.util.JPAServerSession;
 import com.buzz.persistence.util.JPASession;
 import com.buzz.restfulservice.model.User;
 import com.buzz.restfulservice.model.Users;
+import com.buzz.tools.PropertiesHandler;
 import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 
 @XmlAccessorType(XmlAccessType.NONE)
@@ -50,7 +52,9 @@ import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 @Path("/voucherreceptor")
 public class VoucherReceptorService
 {
-	private Logger log = Logger.getLogger(VoucherReceptorService.class); 
+	private Logger log = Logger.getLogger(VoucherReceptorService.class);
+	
+	private Configuration properties;
 	
 	@XmlElement(name="billing")
 	private String url1 = "/voucherreceptor/bill";
@@ -126,6 +130,17 @@ public class VoucherReceptorService
     			//JPAServerSession.commitTransaction(true);
     			JPASession.commitTransaction(true);
     		}catch(Exception e) {
+    			try{
+    				JPASession.rollbackTransaction();
+        		}catch(Exception er) {
+        			try{
+	        			response.append("estado", "Internal Error");
+	    	    		response.append("fullMessage", e.getMessage());
+	    	    		response.append("stacktrace", ExceptionUtils.getStackTrace(er));
+        			}catch(JSONException jsone){
+    	    			log.info(jsone.getMessage());
+    	    		}
+        		}
     			log.info(e.getMessage());
     		}
     	}
@@ -172,6 +187,17 @@ public class VoucherReceptorService
     			//JPAServerSession.commitTransaction(true);
     			JPASession.commitTransaction(true);
     		}catch(Exception e) {
+    			try{
+    				JPASession.rollbackTransaction();
+        		}catch(Exception er) {
+        			try{
+	        			response.append("estado", "Internal Error");
+	    	    		response.append("fullMessage", e.getMessage());
+	    	    		response.append("stacktrace", ExceptionUtils.getStackTrace(er));
+        			}catch(JSONException jsone){
+    	    			log.info(jsone.getMessage());
+    	    		}
+        		}
     			log.info(e.getMessage());
     		}
     	}
@@ -204,21 +230,26 @@ public class VoucherReceptorService
     @Produces("application/pdf")
     public Response getFileInPDFFormat(@PathParam("accessKey") String accessKey) 
     {
-        //System.out.println("File requested is : " + fileName);
-    	log.info("************OBTIENE REPORTE PARA KEY: "+accessKey);
-         
-        //Put some validations here such as invalid file name or missing file name
-        if(accessKey == null || accessKey.isEmpty())
-        {
-            ResponseBuilder response = Response.status(Status.BAD_REQUEST);
-            return response.build();
-        }
-         
-        //Prepare a file object with file to return
-        File file = new File("/Users/santteegt/Desktop/FACTURAELECTRONICA.pdf");
-         
-        ResponseBuilder response = Response.ok((Object) file);
-        response.header("Content-Disposition", "attachment; filename=\"COMPROBANTE-"+accessKey +"\"");
+    	ResponseBuilder response = null;
+    	try{
+	    	log.info("************OBTIENE REPORTE PARA KEY: "+accessKey);
+	    	properties = PropertiesHandler.getInstance("buzzsri"); 
+	        //Put some validations here such as invalid file name or missing file name
+	        if(accessKey == null || accessKey.isEmpty())
+	        {
+	            response = Response.status(Status.BAD_REQUEST);
+	        }
+	        //Prepare a file object with file to return
+	        File file = new File(properties.getString("report.dir.out")
+	        		+accessKey+".pdf");
+	         
+	        response = file.exists() ? Response.ok((Object) file):
+	        	Response.status(Status.NOT_FOUND);
+	        response.header("Content-Disposition", "attachment; filename=\"COMPROBANTE-"+accessKey +"\"");
+    	}catch(Exception e){
+    		log.error(e.getMessage());
+    		response = Response.status(Status.INTERNAL_SERVER_ERROR);
+    	}
         return response.build();
     }
     
