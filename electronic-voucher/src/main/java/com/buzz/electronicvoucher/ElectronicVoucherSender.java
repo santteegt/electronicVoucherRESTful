@@ -25,6 +25,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -48,6 +49,7 @@ import com.buzz.electronicvoucher.util.SignatureUtil;
 import com.buzz.persistence.util.JPASession;
 import com.buzz.persistence.voucher.Tusuario;
 import com.buzz.persistence.voucher.Tusuarioid;
+import com.buzz.tools.PropertiesHandler;
 import com.buzz.tools.ReportManager;
 import com.buzz.tools.TokenCreator;
 
@@ -60,6 +62,7 @@ public class ElectronicVoucherSender {
 	private Object objeto;
 	private String nombre;
 	private Logger log = Logger.getLogger(ElectronicVoucherSender.class);
+	private Configuration properties;
 	//public static final Logger LOGGER = FitbankLogger.getLogger();
 	
 	/**
@@ -68,6 +71,7 @@ public class ElectronicVoucherSender {
      * @return
      */
     public JSONObject processVoucher(Object pObject)throws Exception {
+    	this.properties = PropertiesHandler.getInstance("buzzsri");
     	String username = "ADMIN";
     	/*Map<String, Object> params = new HashMap<String, Object>();
     	params.put("user", username);
@@ -76,15 +80,16 @@ public class ElectronicVoucherSender {
     	Integer ccontribuyente = 1;
     	
     	System.setProperty("javax.net.ssl.trustStore",
-				"/Users/santteegt/Desktop/sri/jks/keystore.jks");
-		System.setProperty("javax.net.ssl.trustStorePassword", "Musho2014");
+    			properties.getString("signature.jks"));
+		System.setProperty("javax.net.ssl.trustStorePassword", 
+				properties.getString("signature.jks.password"));
 		System.setProperty("javax.net.ssl.trustStoreType", "JKS");
 		/*String tipo = (String) pDetail.findFieldByNameCreate("MOSTRARDOC")
 				.getValue();*/
 		//Integer company = pDetail.getCompany();
-		String pathFileJks = "/Users/santteegt/Desktop/sri/jks/ivan_mauricio_amay_aviles.p12";
-		String jksPasswordStore = "Musho2014";
-		String jksPassPrivate = "Musho2014";
+		String pathFileJks = properties.getString("signature.p12");
+		String jksPasswordStore = properties.getString("signature.jks.password");
+		String jksPassPrivate = properties.getString("signature.jks.password");
 		/*String jksPassAlias = PropertiesHandler.getConfig("security")
 				.getString("jks.passAlias");*/
 		
