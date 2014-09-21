@@ -1,17 +1,13 @@
 package com.buzz.electronicvoucher;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.print.attribute.HashAttributeSet;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -27,10 +23,8 @@ import javax.xml.validation.SchemaFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,9 +40,6 @@ import com.buzz.electronicvoucher.schema.v1_1_0.InfoTributaria;
 import com.buzz.electronicvoucher.util.Modulo11;
 import com.buzz.electronicvoucher.util.SOAPClient;
 import com.buzz.electronicvoucher.util.SignatureUtil;
-import com.buzz.persistence.util.JPASession;
-import com.buzz.persistence.voucher.Tusuario;
-import com.buzz.persistence.voucher.Tusuarioid;
 import com.buzz.tools.PropertiesHandler;
 import com.buzz.tools.ReportManager;
 import com.buzz.tools.TokenCreator;
@@ -60,7 +51,6 @@ public class ElectronicVoucherSender {
 	private String sessionToken = TokenCreator.createToken();
 	private String signedVoucher;
 	private Object objeto;
-	private String nombre;
 	private Logger log = Logger.getLogger(ElectronicVoucherSender.class);
 	private Configuration properties;
 	//public static final Logger LOGGER = FitbankLogger.getLogger();
@@ -113,13 +103,14 @@ public class ElectronicVoucherSender {
 	    	String accessKey = modulo11.obtainEncoding(infoTributaria.getClaveAcceso());
 	    	infoTributaria.setClaveAcceso(accessKey);
 	    	log.info("PROCESSING ACCESSKEY: "+ accessKey);
+	    	Schema schema = null;
 	    	
 	    	if(pObject instanceof Factura) {
 	    		this.voucherType = ElectronicVoucherTypes.BILL;
-	    		Schema schema = schemaFactory.newSchema(
+	    		schema = schemaFactory.newSchema(
 	    				Thread.currentThread().getContextClassLoader()
 	    				.getResource("factura.xsd"));
-	    		marshaller.setSchema(schema);
+	    				
 	    		
 				
 				//FileOutputStream fos = new FileOutputStream("/Users/santteegt/Desktop/test.xml");
@@ -131,12 +122,13 @@ public class ElectronicVoucherSender {
 	    	}
 	    	if (pObject instanceof ComprobanteRetencion){
 	    		this.voucherType = ElectronicVoucherTypes.RETENTION;
-	    		Schema schema = schemaFactory.newSchema(
+	    		schema = schemaFactory.newSchema(
 	    				Thread.currentThread().getContextClassLoader()
 	    				.getResource("comprobanteRetencion1.xsd"));
                 marshaller.setSchema(schema);
 	    		
 	    	}
+	    	marshaller.setSchema(schema);
 	    	marshaller.marshal(pObject, voucherDocument);
 	    	
 	    	this.dataFiller = (DataFiller)Class.forName(this.voucherType.getdataFillerClass()).newInstance();
