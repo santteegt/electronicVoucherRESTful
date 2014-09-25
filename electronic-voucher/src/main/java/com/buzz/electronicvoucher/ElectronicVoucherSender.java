@@ -377,6 +377,7 @@ public class ElectronicVoucherSender {
 					.getElementsByTagName("secuencial").item(0)
 					.getChildNodes().item(0).getNodeValue();
 			
+			
 			reportParameters.put("AMBIENTE", ambiente);
 			reportParameters.put("RUC", ruc);
 			reportParameters.put("CLAVE_ACC", claveAcceso);
