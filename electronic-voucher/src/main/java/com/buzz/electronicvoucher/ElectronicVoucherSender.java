@@ -68,18 +68,20 @@ public class ElectronicVoucherSender {
     	Tusuarioid tusuarioid = (Tusuarioid)JPASession.getQueryBean("from Tusuarioid a where cusuario =:user", params);
     	*/
     	Integer ccontribuyente = 1;
+    	InfoTributaria infoTributaria = (InfoTributaria)pObject.getClass()
+    			.getDeclaredMethod("getInfoTributaria").invoke(pObject);
     	
     	System.setProperty("javax.net.ssl.trustStore",
-    			properties.getString("signature.jks"));
+    			properties.getString("signature.jks"+infoTributaria.getRuc()));
 		System.setProperty("javax.net.ssl.trustStorePassword", 
-				properties.getString("signature.jks.password"));
+				properties.getString("signature.jks.password"+infoTributaria.getRuc()));
 		System.setProperty("javax.net.ssl.trustStoreType", "JKS");
 		/*String tipo = (String) pDetail.findFieldByNameCreate("MOSTRARDOC")
 				.getValue();*/
 		//Integer company = pDetail.getCompany();
-		String pathFileJks = properties.getString("signature.p12");
-		String jksPasswordStore = properties.getString("signature.jks.password");
-		String jksPassPrivate = properties.getString("signature.jks.password");
+		String pathFileJks = properties.getString("signature.p12"+infoTributaria.getRuc());
+		String jksPasswordStore = properties.getString("signature.jks.password"+infoTributaria.getRuc());
+		String jksPassPrivate = properties.getString("signature.jks.password"+infoTributaria.getRuc());
 		/*String jksPassAlias = PropertiesHandler.getConfig("security")
 				.getString("jks.passAlias");*/
 		
@@ -97,8 +99,7 @@ public class ElectronicVoucherSender {
 	    	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	    	SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	    	
-	    	InfoTributaria infoTributaria = (InfoTributaria)pObject.getClass()
-	    			.getDeclaredMethod("getInfoTributaria").invoke(pObject);
+	    	
 	    	Modulo11 modulo11 = new Modulo11();
 	    	String accessKey = modulo11.obtainEncoding(infoTributaria.getClaveAcceso());
 	    	infoTributaria.setClaveAcceso(accessKey);
