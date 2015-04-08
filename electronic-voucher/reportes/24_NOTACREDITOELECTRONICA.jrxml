@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notaCreditoFinal" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="RUC" class="java.lang.String"/>
+	<parameter name="NUM_AUT" class="java.lang.String"/>
+	<parameter name="FECHA_AUT" class="java.lang.String"/>
+	<parameter name="TIPO_EMISION" class="java.lang.String"/>
+	<parameter name="CLAVE_ACC" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="RAZON_SOCIAL" class="java.lang.String"/>
+	<parameter name="DIR_MATRIZ" class="java.lang.String"/>
+	<parameter name="DIR_SUCURSAL" class="java.lang.String"/>
+	<parameter name="CONT_ESPECIAL" class="java.lang.String"/>
+	<parameter name="LLEVA_CONTABILIDAD" class="java.lang.String"/>
+	<parameter name="RS_COMPRADOR" class="java.lang.String"/>
+	<parameter name="RUC_COMPRADOR" class="java.lang.String"/>
+	<parameter name="FECHA_EMISION" class="java.lang.String"/>
+	<parameter name="GUIA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/marco/NetBeansProjects/comprobantes-elctronicos-cliente/resources/reportes/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IVA_12" class="java.lang.String"/>
+	<parameter name="IVA_0" class="java.lang.String"/>
+	<parameter name="MARCA_AGUA" class="java.lang.String"/>
+	<parameter name="ICE" class="java.lang.String"/>
+	<parameter name="SUBTOTAL" class="java.lang.String"/>
+	<parameter name="IVA" class="java.lang.String"/>
+	<parameter name="VALOR_TOTAL" class="java.lang.Object"/>
+	<parameter name="NUM_FACT" class="java.lang.String"/>
+	<parameter name="DOC_MODIFICADO" class="java.lang.String"/>
+	<parameter name="NUM_DOC_MODIFICADO" class="java.lang.String"/>
+	<parameter name="FECHA_EMISION_DOC_SUSTENTO" class="java.lang.String"/>
+	<parameter name="TOTAL_DESCUENTO" class="java.lang.String"/>
+	<parameter name="NO_OBJETO_IVA" class="java.lang.String"/>
+	<parameter name="AMBIENTE" class="java.lang.String"/>
+	<parameter name="RAZON_MODIF" class="java.lang.String"/>
+	<parameter name="NOM_COMERCIAL" class="java.lang.String"/>
+	<parameter name="FITBANK_HEADER_LOGO" class="java.lang.String"/>
+	<queryString language="xPath">
+		<![CDATA[/notaCredito/detalles/detalle]]>
+	</queryString>
+	<field name="codigoInterno" class="java.lang.String">
+		<fieldDescription><![CDATA[codigoInterno]]></fieldDescription>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[descripcion]]></fieldDescription>
+	</field>
+	<field name="precioUnitario" class="java.lang.String">
+		<fieldDescription><![CDATA[precioUnitario]]></fieldDescription>
+	</field>
+	<field name="precioTotalSinImpuesto" class="java.lang.String">
+		<fieldDescription><![CDATA[precioTotalSinImpuesto]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.String">
+		<fieldDescription><![CDATA[cantidad]]></fieldDescription>
+	</field>
+	<variable name="TOTAL" class="java.lang.String"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<image isUsingCache="true">
+				<reportElement x="5" y="15" width="543" height="743" isPrintWhenDetailOverflows="true"/>
+				<imageExpression class="java.lang.String"><![CDATA["/FitBank/sri/images/pruebas.jpeg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="454" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="0" y="172" width="285" height="160"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="295" y="0" width="260" height="332"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="301" y="11" width="65" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[R.U.C.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="301" y="31" width="230" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N O T A   D E   C R É D I T O ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="302" y="90" width="211" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[NÚMERO DE AUTORIZACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="302" y="146" width="99" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[FECHA Y HORA DE AUTORIZACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="302" y="244" width="133" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[CLAVE DE ACCESO]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="302" y="108" width="253" height="27"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{NUM_AUT}==null)?"NO ENVIADO":$P{NUM_AUT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="402" y="146" width="147" height="26"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{FECHA_AUT} ==null)?"NO ENVIADO":$P{FECHA_AUT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="373" y="206" width="167" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TIPO_EMISION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="366" y="11" width="182" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RUC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="306" y="300" width="249" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLAVE_ACC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="302" y="64" width="30" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="335" y="64" width="177" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NUM_FACT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="303" y="183" width="63" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AMBIENTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="304" y="208" width="55" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMISIÓN:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="373" y="183" width="167" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{AMBIENTE}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="350" width="555" height="104"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="2" y="351" width="192" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Razón Social / Nombres y Apellidos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="408" y="351" width="55" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RUC / CI:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="2" y="370" width="87" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Emisión:]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="175" y="351" width="216" height="13"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RS_COMPRADOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="455" y="351" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RUC_COMPRADOR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yy">
+				<reportElement mode="Transparent" x="80" y="370" width="114" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_EMISION}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement mode="Transparent" x="25" y="392" width="491" height="1"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="4" y="415" width="223" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Emisión (Comprobante a modificar) ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="5" y="396" width="154" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comprobante que se modifica]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="287" y="394" width="100" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DOC_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="385" y="393" width="147" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NUM_DOC_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="412" width="100" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_EMISION_DOC_SUSTENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="5" y="434" width="223" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Razón de Modificación:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="61" y="234" width="222" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DIR_MATRIZ}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="234" width="48" height="25"/>
+				<textElement verticalAlignment="Top">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección Matriz:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="12" y="206" width="268" height="13"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NOM_COMERCIAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="302" width="151" height="14">
+					<printWhenExpression><![CDATA[$P{CONT_ESPECIAL}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contribuyente Especial Nro ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="316" width="177" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OBLIGADO A LLEVAR CONTABILIDAD]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="61" y="275" width="222" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DIR_SUCURSAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="268" width="51" height="25"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección Sucursal:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="12" y="176" width="268" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RAZON_SOCIAL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="194" y="302" width="86" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CONT_ESPECIAL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="194" y="316" width="51" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{LLEVA_CONTABILIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="285" y="432" width="243" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RAZON_MODIF}]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Blank">
+				<reportElement key="image-1" stretchType="RelativeToBandHeight" mode="Transparent" x="20" y="26" width="233" height="120"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{FITBANK_HEADER_LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="555" height="28"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="55" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="162" y="0" width="56" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="445" y="0" width="52" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio Unitario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="502" y="0" width="53" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio Total]]></text>
+			</staticText>
+			<line>
+				<reportElement mode="Transparent" x="56" y="0" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="159" y="0" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="220" y="0" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="274" y="0" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="329" y="0" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="442" y="0" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="498" y="0" width="1" height="28"/>
+			</line>
+			<staticText>
+				<reportElement mode="Transparent" x="112" y="2" width="46" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="277" y="1" width="50" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalle Adicional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="332" y="1" width="50" height="27"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalle Adicional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="387" y="0" width="52" height="27"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descuento]]></text>
+			</staticText>
+			<line>
+				<reportElement mode="Transparent" x="385" y="0" width="1" height="28"/>
+			</line>
+			<staticText>
+				<reportElement mode="Transparent" x="222" y="0" width="52" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalle Adicional]]></text>
+			</staticText>
+			<line>
+				<reportElement mode="Transparent" x="110" y="0" width="1" height="28"/>
+			</line>
+			<staticText>
+				<reportElement mode="Transparent" x="57" y="2" width="50" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código Auxiliar]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="555" height="25"/>
+			</rectangle>
+			<textField>
+				<reportElement mode="Transparent" x="112" y="0" width="46" height="24"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="162" y="0" width="56" height="24"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement mode="Transparent" x="56" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="159" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="220" y="-1" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="274" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="329" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="442" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="498" y="0" width="1" height="25"/>
+			</line>
+			<textField>
+				<reportElement x="3" y="1" width="52" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{codigoInterno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="502" y="0" width="51" height="24"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{precioTotalSinImpuesto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="445" y="1" width="51" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{precioUnitario}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement mode="Transparent" x="385" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="110" y="0" width="1" height="25"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="184" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="478" y="60" width="77" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="478" y="20" width="77" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="478" y="40" width="77" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="478" y="0" width="77" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="335" y="19" width="143" height="21"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="20" y="61" width="307" height="116"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="41" y="50" width="152" height="13"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Información Adicional]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="335" y="100" width="143" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="344" y="99" width="95" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[IVA 12%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="60" width="95" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="119" width="87" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ICE]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="335" y="120" width="143" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="478" y="140" width="77" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="478" y="100" width="77" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="335" y="40" width="143" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="335" y="140" width="143" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="478" y="120" width="77" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="344" y="22" width="95" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL 0%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="139" width="92" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALOR TOTAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="483" y="2" width="70" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{IVA_12}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="483" y="22" width="70" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{IVA_0}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="483" y="101" width="70" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{IVA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="483" y="122" width="70" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ICE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="483" y="139" width="70" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[""+$P{VALOR_TOTAL}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="335" y="0" width="143" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="344" y="2" width="96" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL 12%]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="335" y="60" width="143" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="344" y="41" width="129" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL No Objeto IVA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="335" y="80" width="143" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="478" y="80" width="77" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="344" y="80" width="129" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[TOTAL Descuento]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="483" y="63" width="69" height="19"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SUBTOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="486" y="79" width="67" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOTAL_DESCUENTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="483" y="40" width="69" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NO_OBJETO_IVA}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement isPrintRepeatedValues="false" x="20" y="80" width="307" height="55" isRemoveLineWhenBlank="true">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<subreportParameter name="XML_DATA_DOCUMENT">
+					<subreportParameterExpression><![CDATA[$P{XML_DATA_DOCUMENT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "facturaInfoAdicional.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>
