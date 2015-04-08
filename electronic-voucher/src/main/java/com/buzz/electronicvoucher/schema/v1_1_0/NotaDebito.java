@@ -6,7 +6,7 @@
 //
 
 
-package com.buzz.electronicvoucher.schema.v1_0_0;
+package com.buzz.electronicvoucher.schema.v1_1_0;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,9 +22,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.buzz.electronicvoucher.schema.v1_1_0.Impuesto;
-import com.buzz.electronicvoucher.schema.v1_1_0.InfoTributaria;
 
 
 /**
@@ -134,9 +131,10 @@ import com.buzz.electronicvoucher.schema.v1_1_0.InfoTributaria;
     "infoTributaria",
     "infoNotaDebito",
     "motivos",
-    "infoAdicional"
+    "infoAdicional",
+    "signature"
 })
-@XmlRootElement(name = "notaDebito")
+@XmlRootElement(name = "notaDebito" , namespace = "")
 public class NotaDebito {
 
     @XmlElement(required = true)
@@ -146,12 +144,14 @@ public class NotaDebito {
     @XmlElement(required = true)
     protected NotaDebito.Motivos motivos;
     protected NotaDebito.InfoAdicional infoAdicional;
+    @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
+    protected SignatureType signature;
     @XmlAttribute(name = "id")
-    protected String id;
+    protected String id= "comprobante";
     @XmlAttribute(name = "version", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NMTOKEN")
-    protected String version;
+    protected String version="1.0.0";
 
     /**
      * Gets the value of the infoTributaria property.
@@ -257,6 +257,31 @@ public class NotaDebito {
      *     {@link String }
      *     
      */
+    /**
+     *  Conjunto de datos asociados a la factura que garantizar\u00c3\u00a1n la autor\u00c3\u00ada y la integridad del mensaje. Se define como opcional para facilitar la verificaci\u00c3\u00b3n y el tr\u00c3\u00a1nsito del fichero. No obstante, debe cumplimentarse este bloque de firma electr\u00c3\u00b3nica para que se considere una factura electr\u00c3\u00b3nica v\u00c3\u00a1lida legalmente frente a terceros.
+     * 
+     * @return
+     *     possible object is
+     *     {@link SignatureType }
+     *     
+     */
+    public SignatureType getSignature() {
+        return signature;
+    }
+
+    /**
+     * Sets the value of the signature property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link SignatureType }
+     *     
+     */
+    public void setSignature(SignatureType value) {
+        this.signature = value;
+    }
+
+    
     public String getId() {
         return id;
     }

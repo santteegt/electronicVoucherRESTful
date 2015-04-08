@@ -14,6 +14,7 @@ import es.mityc.javasign.xml.refs.AllXMLToSign;
 import es.mityc.javasign.xml.refs.InternObjectToSign;
 import es.mityc.javasign.xml.refs.ObjectToSign;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Document;
@@ -39,8 +40,10 @@ import java.util.List;
 
 import org.apache.xml.security.Init;
 
-public class SignatureUtil {
+import com.buzz.tools.PropertiesHandler;
 
+public class SignatureUtil {
+    private Configuration properties;
     private String type = StringUtils.EMPTY;
     private String path_store_file = StringUtils.EMPTY;
     private String key_store_password = StringUtils.EMPTY;
@@ -52,7 +55,7 @@ public class SignatureUtil {
         try {
             Constants.setSignatureSpecNSprefix("ds");
         } catch (Exception e) {
-            //Debug.error(e);
+            // Debug.error(e);
         }
     }
 
@@ -65,7 +68,7 @@ public class SignatureUtil {
         this.private_key_alias = keyAlias;
         this.path_store_file = pathStoreFile;
     }
-    
+
     public SignatureUtil(String typeStore, String pathStoreFile,
             String keyStorePassword, String privateKey) {
         this.type = typeStore;
@@ -88,11 +91,13 @@ public class SignatureUtil {
         DataToSign dataToSign = new DataToSign();
         dataToSign.setXadesFormat(EnumFormatoFirma.XAdES_BES);
         dataToSign.setEsquema(XAdESSchemas.XAdES_132);
-        dataToSign.setXMLEncoding("UTF-8");        
-        //dataToSign.addClaimedRol(new SimpleClaimedRole("Rol de firma"));
+        dataToSign.setXMLEncoding("UTF-8");
+        // dataToSign.addClaimedRol(new SimpleClaimedRole("Rol de firma"));
         dataToSign.setEnveloped(true);
-        dataToSign.addObject(new ObjectToSign(new InternObjectToSign("comprobante"), "contenido comprobante", null,
-                "text/xml", null));
+        dataToSign
+                .addObject(new ObjectToSign(new InternObjectToSign(
+                        "comprobante"), "contenido comprobante", null,
+                        "text/xml", null));
         dataToSign.setParentSignNode("comprobante");
         Document doc = this.loadDocumentFromFile(new File(pathInputFile));
 
@@ -101,15 +106,15 @@ public class SignatureUtil {
         ks.load(new FileInputStream(this.path_store_file),
                 key_store_password.toCharArray());
         IPKStoreManager storeManager = new KSStore(ks, new PassStoreKS(
-                this.private_key));        
-        
-        //PrivateKey privateKey = (PrivateKey) ks.getKey(private_key_alias,
-          //      private_key.toCharArray());
+                this.private_key));
+
+        // PrivateKey privateKey = (PrivateKey) ks.getKey(private_key_alias,
+        // private_key.toCharArray());
 
         // Añadimos el KeyInfo del certificado cuya clave privada usamos
         X509Certificate cert = getFirstCertificate(storeManager);
-        //X509Certificate cert = (X509Certificate) ks
-        //        .getCertificate(private_key_alias);
+        // X509Certificate cert = (X509Certificate) ks
+        // .getCertificate(private_key_alias);
         // Obtenemos la clave privada, pues la necesitaremos para encriptar.
         PrivateKey privateKey = storeManager.getPrivateKey(cert);
 
@@ -122,40 +127,42 @@ public class SignatureUtil {
                     provider);
             docSign = (Document) objSign[0];
         } catch (Exception e) {
-            //Debug.error(e);
+            // Debug.error(e);
         }
 
         return docSign;
     }
-    
+
     private Document commonInputFileProcess(Document doc) throws Exception {
         Document docSign = null;
         FirmaXML firma = new FirmaXML();
         DataToSign dataToSign = new DataToSign();
         dataToSign.setXadesFormat(EnumFormatoFirma.XAdES_BES);
         dataToSign.setEsquema(XAdESSchemas.XAdES_132);
-        dataToSign.setXMLEncoding("UTF-8");        
-        //dataToSign.addClaimedRol(new SimpleClaimedRole("Rol de firma"));
+        dataToSign.setXMLEncoding("UTF-8");
+        // dataToSign.addClaimedRol(new SimpleClaimedRole("Rol de firma"));
         dataToSign.setEnveloped(true);
-        dataToSign.addObject(new ObjectToSign(new InternObjectToSign("comprobante"), "contenido comprobante", null,
-                "text/xml", null));
+        dataToSign
+                .addObject(new ObjectToSign(new InternObjectToSign(
+                        "comprobante"), "contenido comprobante", null,
+                        "text/xml", null));
         dataToSign.setParentSignNode("comprobante");
-        //Document doc = this.loadDocumentFromFile(new File(pathInputFile));
+        // Document doc = this.loadDocumentFromFile(new File(pathInputFile));
 
         // Cargamos el almacen de claves
         KeyStore ks = KeyStore.getInstance(type);
         ks.load(new FileInputStream(this.path_store_file),
                 key_store_password.toCharArray());
         IPKStoreManager storeManager = new KSStore(ks, new PassStoreKS(
-                this.private_key));        
-        
-        //PrivateKey privateKey = (PrivateKey) ks.getKey(private_key_alias,
-          //      private_key.toCharArray());
+                this.private_key));
+
+        // PrivateKey privateKey = (PrivateKey) ks.getKey(private_key_alias,
+        // private_key.toCharArray());
 
         // Añadimos el KeyInfo del certificado cuya clave privada usamos
         X509Certificate cert = getFirstCertificate(storeManager);
-        //X509Certificate cert = (X509Certificate) ks
-        //        .getCertificate(private_key_alias);
+        // X509Certificate cert = (X509Certificate) ks
+        // .getCertificate(private_key_alias);
         // Obtenemos la clave privada, pues la necesitaremos para encriptar.
         PrivateKey privateKey = storeManager.getPrivateKey(cert);
 
@@ -168,30 +175,30 @@ public class SignatureUtil {
                     provider);
             docSign = (Document) objSign[0];
         } catch (Exception e) {
-            //Debug.error(e);
+            // Debug.error(e);
         }
 
         return docSign;
     }
-    
-    
+
     private X509Certificate getFirstCertificate(
-          final IPKStoreManager storeManager) {
-         List<X509Certificate> certs = null;
-         try {
-             certs = storeManager.getSignCertificates();
-         } catch (CertStoreException ex) {
-             System.err.println("Fallo obteniendo listado de certificados");
-             System.exit(-1);
-         }
-         if ((certs == null) || (certs.size() == 0)) {
-             System.err.println("Lista de certificados vacía");
-             System.exit(-1);
-         }
- 
-         X509Certificate certificate = certs.get(0);
-         return certificate;
-     }
+            final IPKStoreManager storeManager) {
+        List<X509Certificate> certs = null;
+        try {
+            certs = storeManager.getSignCertificates();
+        } catch (CertStoreException ex) {
+            System.err.println("Fallo obteniendo listado de certificados");
+            System.exit(-1);
+        }
+        if ((certs == null) || (certs.size() == 0)) {
+            System.err.println("Lista de certificados vacía");
+            System.exit(-1);
+        }
+
+        X509Certificate certificate = certs.get(0);
+        return certificate;
+    }
+
     public String processXMLString(String pathInputFile, String pathOutputFile)
             throws Exception {
         Document doc = this.commonInputFileProcess(pathInputFile,
@@ -200,12 +207,15 @@ public class SignatureUtil {
         this.outputDocToFile(doc, signatureFile);
         return this.docToXMLString(doc);
     }
-    
-    public String processXMLString(Document doc)
-            throws Exception {
+
+    public String processXMLString(Document doc, String ruc, String clave,
+            String nombre) throws Exception {
+        this.properties = PropertiesHandler.getInstance("buzzsri");
+        String path = StringUtils.EMPTY;
         Document signedDoc = this.commonInputFileProcess(doc);
-        //File signatureFile = new File(pathOutputFile);
-        //this.outputDocToFile(doc, signatureFile);
+        path = properties.getString("documents.dir.fir." + ruc);
+        File signatureFile = new File(path + nombre + clave + ".xml");
+        this.outputDocToFile(doc, signatureFile);
         return this.docToXMLString(signedDoc);
     }
 

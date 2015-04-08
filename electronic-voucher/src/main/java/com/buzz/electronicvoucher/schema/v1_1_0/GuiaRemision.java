@@ -122,11 +122,11 @@ public class GuiaRemision {
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
     protected SignatureType signature;
     @XmlAttribute(name = "id", required = true)
-    protected String id;
+    protected String id = "comprobante";
     @XmlAttribute(name = "version", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NMTOKEN")
-    protected String version;
+    protected String version = "1.1.0";
 
     /**
      * Gets the value of the infoTributaria property.

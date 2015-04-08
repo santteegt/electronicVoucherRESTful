@@ -79,11 +79,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Impuesto }
+     * Create an instance of {@link ImpuestoND }
      * 
      */
-    public Impuesto createImpuesto() {
-        return new Impuesto();
+    public ImpuestoND createImpuesto() {
+        return new ImpuestoND();
     }
 
     /**
