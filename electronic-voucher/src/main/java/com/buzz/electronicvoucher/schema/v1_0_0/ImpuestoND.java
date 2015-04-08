@@ -54,7 +54,7 @@ import javax.xml.bind.annotation.XmlType;
     "numDocSustento",
     "fechaEmisionDocSustento"
 })
-public class Impuesto {
+public class ImpuestoND {
 
     @XmlElement(required = true)
     protected String codigo;

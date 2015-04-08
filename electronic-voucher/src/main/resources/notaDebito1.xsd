@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2012 sp1 (x64) (http://www.altova.com) by Jacobo Salazar (Particular) -->
-<!-- edited with XMLSPY v5 rel. 3 U (http://www.xmlspy.com) by ALEJANDRO SUBIA (SERVICIO DE RENTAS INTERNAS) -->
+<?xml version="1.1" encoding="UTF-8"?>
 <xsd:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd"/>
 	<xsd:simpleType name="numeroRuc">
 		<xsd:annotation>
 			<xsd:documentation>Se detalla el numero de RUC del Contribuyente</xsd:documentation>
@@ -31,7 +30,7 @@
 			<xsd:pattern value="[0-9]{10}001"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="fecha">
+	<xsd:simpleType name="fechaType">
 		<xsd:annotation>
 			<xsd:documentation>Se detalla la fecha de uso del documento</xsd:documentation>
 		</xsd:annotation>
@@ -97,6 +96,14 @@
 			<xsd:maxInclusive value="8"/>
 		</xsd:restriction>
 	</xsd:simpleType>
+	<xsd:simpleType name="claveAcceso">
+		<xsd:annotation>
+			<xsd:documentation>Se guarda la informacion para la clave de acceso</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[0-9]{49}"/>
+		</xsd:restriction>
+	</xsd:simpleType>	
 	<xsd:simpleType name="autorizacion">
 		<xsd:annotation>
 			<xsd:documentation>Corresponde al numero de autorizacion emitido por el sistema de Autorizacion de Comprobantes de Venta y Retencion
@@ -202,14 +209,6 @@
 			<xsd:pattern value="([A-Z]|[a-z]|[0-9]|ñ|Ñ)+([\w]|[\s]|[\S])*"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="claveAcceso">
-		<xsd:annotation>
-			<xsd:documentation>Se guarda la informacion para la clave de acceso</xsd:documentation>
-		</xsd:annotation>
-		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="[0-9]{49}"/>
-		</xsd:restriction>
-	</xsd:simpleType>
 	<xsd:simpleType name="fechaEmision">
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="([0][1-9]|[1-2][0-9]|[3][0-1])/([0][1-9]|[1][0-2])/[1-2][0-9][0-9][0-9]"/>
@@ -297,7 +296,7 @@
 	</xsd:simpleType>
 	<xsd:complexType name="detalle">
 		<xsd:annotation>
-			<xsd:documentation>Detalle de una nota de credito.</xsd:documentation>
+			<xsd:documentation>Detalle de una nota de debito.</xsd:documentation>
 		</xsd:annotation>
 		<xsd:sequence>
 			<xsd:element name="motivoModificacion" type="xsd:string"/>
@@ -395,7 +394,7 @@
 						</xsd:sequence>
 					</xsd:complexType>
 				</xsd:element>
-						</xsd:sequence>
+			</xsd:sequence>
 			<xsd:attribute name="id">
 				<xsd:simpleType>
 					<xsd:restriction base="xsd:string">

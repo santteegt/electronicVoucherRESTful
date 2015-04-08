@@ -295,7 +295,7 @@ public class ComprobanteRetencion {
     public static class Impuestos {
 
         @XmlElement(required = true)
-        protected List<Impuesto> impuesto;
+        protected List<ImpuestoND> impuesto;
 
         /**
          * Gets the value of the impuesto property.
@@ -315,13 +315,13 @@ public class ComprobanteRetencion {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Impuesto }
+         * {@link ImpuestoND }
          * 
          * 
          */
-        public List<Impuesto> getImpuesto() {
+        public List<ImpuestoND> getImpuesto() {
             if (impuesto == null) {
-                impuesto = new ArrayList<Impuesto>();
+                impuesto = new ArrayList<ImpuestoND>();
             }
             return this.impuesto;
         }
