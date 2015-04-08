@@ -9,6 +9,7 @@ import javax.persistence.Query;
 
 import com.buzz.persistence.voucher.Ttipocontribuyente;
 import com.buzz.persistence.voucher.Tusuario;
+import com.buzz.persistence.voucher.Tusuarioid;
 
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +85,7 @@ public class JPASession {
 	}
 	
 	public static <T> List<T> getResultSetQuery(String queryString, Map<String,Object>... params)throws Exception {
-		Map<String,Object> parameters = params != null?params[0]:new HashMap<String, Object>();
+		Map<String,Object> parameters = params != null && params.length>0?params[0]:new HashMap<String, Object>();
 		List <T> resultList = null;
 		try {
 			if(JPASession.getEntityManager() != null) {
@@ -138,18 +139,18 @@ public class JPASession {
 	public static void main(String []args)throws Exception {
 		
 		JPASession.beginTransaction();
-		Ttipocontribuyente ttipocontr = new Ttipocontribuyente(2);
+/*		Ttipocontribuyente ttipocontr = new Ttipocontribuyente();
 		ttipocontr.setDescripcion("TEST2");
 		JPASession.saveOrUpdate(ttipocontr);
 		//em.persist(ttipocontr);
 		JPASession.commitTransaction(false);
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("user", "ADMIN");
+*/		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("user", "TEST2");
 		/*Tusuarioid user = (Tusuarioid)JPASession.getQueryBean("from Tusuarioid a where cusuario=:user", params);
 		System.out.println(user.toString());*/
 		List<Tusuario> list = JPASession.getResultSetQuery("from Tusuario a"); 
 		for(Tusuario entity: list){
-			System.out.println(entity.toString());
+			System.out.println(entity.getRazonSocial());
 		}
 		JPASession.commitTransaction(true);
 	}
